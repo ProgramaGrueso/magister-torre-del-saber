@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Magíster: La Torre del Saber</title>
+<style>
+:root{
+  --bg:#0f0b17; --bg2:#1c1530; --gold:#e8c26a; --gold2:#b8903a; --ink:#f4ecd8; --mut:#a89fb8;
+  --hp:#c0392b; --blk:#4aa3d8;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#000;color:var(--ink);font-family:Georgia,'Palatino Linotype',serif;overflow:hidden;user-select:none}
+button{font-family:inherit;cursor:pointer}
+#app{height:100%;display:flex;flex-direction:column;position:relative;background:var(--bg) center/cover no-repeat}
+#app::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#0000 0,#000b 100%);pointer-events:none}
+#app>*{position:relative}
+.btn{background:linear-gradient(#f0cf80,#b8903a);color:#2a1d05;border:0;border-radius:8px;padding:11px 26px;font-weight:bold;font-size:16px;box-shadow:0 3px 0 #6e5217,0 6px 14px #0008;letter-spacing:.5px}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #6e5217}
+.btn.ghost{background:#0007;color:var(--gold);border:1px solid var(--gold2);box-shadow:none}
+.btn:disabled{opacity:.4}
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;text-align:center;overflow:auto}
+h1{font-size:clamp(34px,7vw,74px);margin:0;color:var(--gold);letter-spacing:6px;text-shadow:0 4px 0 #000,0 0 40px #e8c26a77;font-variant:small-caps}
+h2{margin:0;color:var(--gold);text-shadow:0 2px 4px #000}
+.sub{color:#d8cfe8;max-width:600px;line-height:1.45;text-shadow:0 1px 3px #000}
+.tip{font-size:12px;color:var(--mut)}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.titlebox{background:#0009;border:1px solid var(--gold2);border-radius:16px;padding:26px 34px;backdrop-filter:blur(3px);max-width:680px}
+
+/* personajes */
+.chars{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+.charcard{width:270px;background:linear-gradient(#251c3e,#150f26);border:2px solid #4a3a6a;border-radius:16px;padding:14px;cursor:pointer;transition:.2s;text-align:center;box-shadow:0 8px 24px #000a}
+.charcard:hover{transform:translateY(-8px) scale(1.02);border-color:var(--c);box-shadow:0 0 30px var(--c),0 8px 24px #000a}
+.charcard .ph{width:190px;aspect-ratio:3/4;margin:0 auto 8px;border:3px solid var(--c);border-radius:50% 50% 8px 8px/38% 38% 8px 8px;overflow:hidden;box-shadow:0 0 18px var(--c)}
+.charcard .ph img{width:100%;height:100%;object-fit:cover;object-position:center 20%;filter:sepia(.35) contrast(1.05)}
+.charcard h3{margin:4px 0;color:var(--c);font-size:20px}
+.charcard small{color:var(--mut);display:block;margin:3px 0}
+.charcard .pas{font-size:12.5px;background:#0006;border-radius:8px;padding:6px;margin-top:6px;color:#e6dcc4}
+
+.top{display:flex;align-items:center;gap:12px;padding:7px 14px;background:#000b;border-bottom:1px solid var(--gold2);font-size:15px;flex-wrap:wrap;z-index:5}
+.top .sp{flex:1}
+.top b{color:var(--gold)}
+.mini{background:#0008;border:1px solid #5a4a7a;color:var(--ink);border-radius:6px;padding:3px 10px}
+.mini:hover{border-color:var(--gold)}
+
+/* combate */
+.field{flex:1;display:flex;align-items:flex-end;justify-content:space-between;padding:6px 5vw;gap:10px;min-height:0}
+.unit{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;transition:opacity .5s,transform .5s}
+.portrait{width:calc(var(--H,720px)*.255);aspect-ratio:3/4;border:4px solid var(--c);border-radius:50% 50% 10px 10px/38% 38% 10px 10px;overflow:hidden;box-shadow:0 0 30px var(--c),0 10px 20px #000a;position:relative;background:#000}
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:center 18%;filter:sepia(.3) contrast(1.08) saturate(1.1)}
+.eart{width:calc(var(--H,720px)*.34);aspect-ratio:1;border-radius:50%;object-fit:cover;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);filter:drop-shadow(0 0 12px #000);transition:.2s}
+.unit.enemy.boss .eart{width:calc(var(--H,720px)*.46)}
+.plate{background:linear-gradient(#000c,#000a);border:1px solid var(--gold2);border-radius:6px;padding:1px 12px;font-size:13px;font-weight:bold;color:var(--gold)}
+.bar{width:140px;height:13px;background:#000c;border-radius:7px;overflow:hidden;border:1px solid #000;position:relative}
+.bar i{display:block;height:100%;background:linear-gradient(#e0584a,var(--hp));transition:width .35s}
+.bar span{position:absolute;inset:0;font-size:10px;text-align:center;line-height:13px;color:#fff}
+.chip{display:inline-block;font-size:12px;background:#000a;border-radius:10px;padding:1px 7px;margin:1px}
+.chip.blk{color:var(--blk);border:1px solid var(--blk)}
+.intent{font-size:16px;background:#000c;border-radius:12px;padding:2px 12px;border:1px solid #7a6aa0;font-weight:bold}
+.enemies{display:flex;gap:2vw;align-items:flex-end}
+.unit.targetable{cursor:crosshair}
+.unit.targetable .eart{animation:pulse 1s infinite}
+.unit.dead{opacity:0;transform:scale(.5) translateY(30px);pointer-events:none}
+.unit.shake{animation:shake .35s}
+.unit.lunge{animation:lunge .5s}
+.unit.elite .plate::after{content:" ★"}
+@keyframes pulse{50%{transform:scale(1.07);filter:drop-shadow(0 0 20px #ffe27a)}}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+@keyframes lunge{40%{transform:translateX(-60px) scale(1.1)}}
+.fl{position:absolute;top:18%;left:50%;font-size:28px;font-weight:bold;pointer-events:none;animation:fl 1.1s forwards;text-shadow:0 2px 3px #000,0 0 8px #000;white-space:nowrap;z-index:20}
+@keyframes fl{from{transform:translate(-50%,0) scale(.6);opacity:1}20%{transform:translate(-50%,-10px) scale(1.2)}to{transform:translate(-50%,-70px) scale(1);opacity:0}}
+.fl.dmg{color:#ff6a5a}.fl.blk{color:var(--blk)}.fl.heal{color:#6fe08a}.fl.st{color:var(--gold);font-size:17px}
+.slash{position:absolute;inset:10%;pointer-events:none;z-index:15;background:linear-gradient(115deg,transparent 46%,#fff 49%,#ffd 51%,transparent 54%);animation:slash .3s forwards;mix-blend-mode:screen}
+@keyframes slash{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0);opacity:0}}
+.flash{position:absolute;inset:0;background:radial-gradient(circle,#f003,#f008);pointer-events:none;animation:fade .5s forwards;border-radius:inherit;z-index:15}
+@keyframes fade{to{opacity:0}}
+.bubble{position:absolute;bottom:105%;left:60%;width:190px;background:#f4ecd8;color:#2a1d05;border-radius:12px;padding:7px 10px;font-size:13px;font-style:italic;line-height:1.2;box-shadow:0 4px 12px #000a;animation:bub 3.6s forwards;z-index:30;text-align:center}
+.bubble::after{content:"";position:absolute;top:100%;left:20px;border:8px solid transparent;border-top-color:#f4ecd8}
+@keyframes bub{0%{opacity:0;transform:translateY(8px)}8%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+
+.hud{display:flex;align-items:flex-end;gap:10px;padding:6px 10px 10px;background:linear-gradient(transparent,#000d 40%);min-height:0}
+.side{display:flex;flex-direction:column;gap:6px;align-items:center;min-width:76px}
+.orb{width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe08a,#c98a10);color:#3a2300;font-weight:bold;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px #f0b840aa;border:3px solid #fff5}
+.pile{font-size:12px;color:var(--mut);text-align:center}
+.hand{flex:1;display:flex;justify-content:center;align-items:flex-end;min-height:278px;overflow-x:auto;padding:46px 10px 2px}
+.card{position:relative;flex:0 0 auto;font-size:var(--fs,10px);width:15em;height:21em;margin:0 var(--m,-4px);background:#0a0a0a;border-radius:.95em;padding:.42em;cursor:pointer;transition:transform .18s,box-shadow .18s;box-shadow:0 .5em 1.2em #000c;transform:rotate(var(--r,0deg)) translateY(var(--y,0px));font-family:Georgia,'Palatino Linotype',serif;color:#1a1208}
+.card .in{height:100%;border-radius:.65em;padding:.38em;display:flex;flex-direction:column;gap:.24em;background:linear-gradient(160deg,var(--f1),var(--f2));box-shadow:inset 0 0 .6em #0009}
+.card .tb{display:flex;align-items:center;justify-content:space-between;gap:.3em;height:1.95em;padding:0 .45em;border-radius:.45em;background:linear-gradient(var(--f3),var(--f4));border:.1em solid #0009;box-shadow:inset 0 .1em .15em #fff8,0 .12em .2em #0007}
+.card .nm{font-weight:bold;font-size:.93em;line-height:1;letter-spacing:.01em}
+.card .cost{flex:0 0 auto;width:1.55em;height:1.55em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff1b0,#d29a18 70%);color:#3a2300;font-weight:bold;display:flex;align-items:center;justify-content:center;border:.1em solid #5a3d05;font-size:.95em;box-shadow:0 .1em .2em #0008}
+.card .art{height:7.7em;border-radius:.25em;overflow:hidden;border:.14em solid #111;box-shadow:0 0 0 .08em var(--f3)}
+.card .art img{width:100%;height:100%;object-fit:cover;display:block}
+.card .tl{display:flex;align-items:center;justify-content:space-between;gap:.3em;min-height:1.7em;padding:.1em .45em;border-radius:.4em;background:linear-gradient(var(--f3),var(--f4));border:.1em solid #0009;font-size:.74em;font-weight:bold;line-height:1.05;box-shadow:inset 0 .1em .15em #fff8}
+.card .gem{flex:0 0 auto;width:.95em;height:.95em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#555);border:.08em solid #000}
+.card.rar0 .gem{background:radial-gradient(circle at 35% 30%,#bbb,#111)}
+.card.rar1 .gem{background:radial-gradient(circle at 35% 30%,#fff,#7aa3c8 55%,#345)}
+.card.rar2 .gem{background:radial-gradient(circle at 35% 30%,#fff7c0,#e8b73a 55%,#7a5200)}
+.card.rar3 .gem{background:radial-gradient(circle at 35% 30%,#ffd0a0,#e8541f 55%,#5a1500)}
+.card .box{flex:1;min-height:0;border-radius:.3em;padding:.45em .55em;background:linear-gradient(#f4ebd3,#e6d9b8);border:.1em solid #0009;box-shadow:inset 0 0 .5em #8a6d3a66;display:flex;flex-direction:column;justify-content:center;gap:.28em;overflow:hidden}
+.card .rules{font-size:.86em;line-height:1.12;font-weight:bold}
+.card hr{border:0;border-top:.08em solid #8a6d3a88;margin:0}
+.card .lore{font-size:.7em;font-style:italic;line-height:1.12;color:#3a2c16}
+.card .ft{display:flex;justify-content:space-between;font-size:.55em;color:#f2e8cf;letter-spacing:.04em;padding:0 .4em;height:1.3em;align-items:center;text-shadow:0 .08em .12em #000}
+.card .pt{position:absolute;right:.85em;bottom:.72em;background:linear-gradient(var(--f3),var(--f4));border:.13em solid #111;border-radius:.45em;padding:.05em .5em;font-weight:bold;font-size:1em;box-shadow:0 .1em .25em #000a}
+.card:hover{transform:translateY(-3.2em) scale(1.08) rotate(0);z-index:50}
+.card.sel{transform:translateY(-4.2em) scale(1.1) rotate(0);z-index:60;box-shadow:0 0 1.6em var(--gold)}
+.card.no{filter:grayscale(.7) brightness(.65)}
+.card.deal{animation:deal .45s backwards;animation-delay:var(--d,0s)}
+@keyframes deal{from{transform:translate(-45vw,40px) rotate(-30deg) scale(.5);opacity:0}}
+.card.rar2{box-shadow:0 0 1em #e8c26a99,0 .5em 1.2em #000c}
+.card.rar3{box-shadow:0 0 1.2em #ff8a4cdd,0 .5em 1.2em #000c}
+.card.f-freire{--f1:#8f3e22;--f2:#5a2411;--f3:#f0cfb6;--f4:#d9a888}
+.card.f-montessori{--f1:#3d7a50;--f2:#1f4a2e;--f3:#d3e6c9;--f4:#a8caa0}
+.card.f-vygotsky{--f1:#3d62a6;--f2:#1d3566;--f3:#cddcf2;--f4:#9db9e0}
+.card.f-n{--f1:#a08a4a;--f2:#5f4e22;--f3:#f1e6bc;--f4:#d8c58a}
+.card.f-x{--f1:#7a746a;--f2:#403c36;--f3:#e6e1d6;--f4:#c4bdae}
+.hand .card hr,.hand .card .lore{display:none}
+.card.big{margin:0;--fs:17px}
+.card.big:hover{transform:translateY(-8px) scale(1.04)}
+#preview{zoom:var(--S,1);position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:150;pointer-events:none;display:none;filter:drop-shadow(0 0 30px #000)}
+#preview .card{margin:0;transform:none!important;--fs:21px}
+#preview.on{display:block}
+.endbtn{align-self:flex-end}
+.rewards{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;padding:14px}
+
+/* mapa */
+.map{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center;max-width:760px}
+.node{width:62px;height:62px;border-radius:50%;background:#1c1530;border:2px solid #4a3a6a;display:flex;align-items:center;justify-content:center;font-size:28px}
+.node.done{opacity:.35;filter:grayscale(1)}.node.cur{border-color:var(--gold);box-shadow:0 0 22px var(--gold);transform:scale(1.2);background:#2c2147}
+.line{width:16px;height:3px;background:#4a3a6a}
+
+.ov{zoom:var(--S,1);position:fixed;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;z-index:200;padding:14px}
+.panel{background:var(--bg2);border:2px solid var(--gold2);border-radius:14px;padding:20px;max-width:1100px;max-height:calc(var(--H,720px)*.88);overflow:auto;line-height:1.5}
+.panel li{margin:4px 0}
+.deck{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:10px}
+.legend b{color:var(--gold)}
+.choice{background:#150f26;border:2px solid #4a3a6a;border-radius:12px;padding:14px;width:240px;cursor:pointer;transition:.15s}
+.choice:hover{border-color:var(--gold);transform:translateY(-4px)}
+.choice b{color:var(--gold)}
+.credit{font-size:12px;color:var(--mut)}
+@media (max-width:760px){
+  .card{--fs:7px}.card.big{--fs:12px}
+  .hand{min-height:200px}.orb{width:50px;height:50px;font-size:20px}.side{min-width:56px}
+  .bar{width:96px}.charcard{width:100%}
+  .bubble{width:150px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ---------- ASSETS ---------- */
+const ASSETS=window.__ASSETS||null;
+const A=n=>ASSETS?ASSETS[n]:'assets/'+n;
+const $=s=>document.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* ---------- AUDIO ---------- */
+let muted=false,actx=null,curTrack=null;
+const tracks={};
+function initAudio(){
+  if(actx)return;
+  actx=new (window.AudioContext||window.webkitAudioContext)();
+  for(const n of ['menu','combat','boss','victory']){
+    const a=new Audio(A('m_'+n+'.mp3'));a.loop=n!=='victory';a.volume=0;a.preload='auto';tracks[n]=a;
+  }
+}
+function music(name){
+  if(!actx||name===curTrack)return;
+  const prev=tracks[curTrack];curTrack=name;const nxt=tracks[name];
+  if(nxt){nxt.currentTime=0;nxt.play().catch(()=>{})}
+  const t0=performance.now();
+  (function step(){
+    const k=Math.min(1,(performance.now()-t0)/1200);
+    if(prev)prev.volume=muted?0:0.5*(1-k);
+    if(nxt)nxt.volume=muted?0:0.5*k;
+    if(k<1)requestAnimationFrame(step);else if(prev&&prev!==nxt)prev.pause();
+  })();
+}
+function toggleMute(){
+  muted=!muted;
+  const t=tracks[curTrack];if(t)t.volume=muted?0:0.5;
+  document.querySelectorAll('.mutebtn').forEach(b=>b.textContent=muted?'🔇':'🔊');
+}
+function tone(f,d,type='sine',vol=0.2,when=0,slide=0){
+  if(!actx||muted)return;
+  const t=actx.currentTime+when,o=actx.createOscillator(),g=actx.createGain();
+  o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,f+slide),t+d);
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);
+  o.connect(g).connect(actx.destination);o.start(t);o.stop(t+d+0.02);
+}
+function noise(d,vol=0.25,freq=1200,when=0){
+  if(!actx||muted)return;
+  const n=actx.sampleRate*d,buf=actx.createBuffer(1,n,actx.sampleRate),dt=buf.getChannelData(0);
+  for(let i=0;i<n;i++)dt[i]=(Math.random()*2-1)*(1-i/n);
+  const s=actx.createBufferSource(),f=actx.createBiquadFilter(),g=actx.createGain();
+  s.buffer=buf;f.type='bandpass';f.frequency.value=freq;g.gain.value=vol;
+  s.connect(f).connect(g).connect(actx.destination);s.start(actx.currentTime+when);
+}
+function sfx(k){
+  if(!actx)return;
+  if(actx.state==='suspended')actx.resume();
+  switch(k){
+    case 'click':tone(520,.06,'triangle',.12);break;
+    case 'card':noise(.12,.18,2500);break;
+    case 'hit':noise(.18,.35,900);tone(140,.18,'sine',.35,0,-90);break;
+    case 'hurt':noise(.25,.4,500);tone(90,.3,'sawtooth',.25,0,-50);break;
+    case 'block':tone(880,.25,'triangle',.18);tone(1320,.3,'triangle',.1,.03);break;
+    case 'heal':[523,659,784,1047].forEach((f,i)=>tone(f,.25,'sine',.15,i*.07));break;
+    case 'buff':tone(330,.2,'square',.08);tone(495,.3,'square',.08,.1);break;
+    case 'debuff':tone(300,.3,'sawtooth',.1,0,-150);break;
+    case 'win':[523,659,784,1047,1319].forEach((f,i)=>tone(f,.4,'triangle',.18,i*.12));break;
+    case 'lose':[392,330,262,196].forEach((f,i)=>tone(f,.5,'triangle',.2,i*.25));break;
+    case 'turn':tone(660,.15,'sine',.15);tone(880,.2,'sine',.12,.1);break;
+  }
+}
+
+/* ---------- DATOS ---------- */
+const CHARS={
+  freire:{n:'Paulo Freire',col:'#d9603b',hp:75,tema:'Pedagogía crítica · Brasil',idea:'Nadie educa a nadie: nos educamos entre todos, mediados por el mundo.',
+    pas:'Diálogo: al jugar tu 3.ª carta del turno, robas 1 carta.',
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','f_pregunta','f_dialogo']},
+  montessori:{n:'María Montessori',col:'#4fa86a',hp:70,tema:'Método Montessori · Italia',idea:'Ayúdame a hacerlo por mí mismo: el ambiente preparado libera la autonomía.',
+    pas:'Ambiente preparado: empiezas cada turno con 3 de Andamio.',
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','m_ambiente','m_autonomia']},
+  vygotsky:{n:'Lev Vygotsky',col:'#5a8de0',hp:72,tema:'Constructivismo sociocultural · URSS',idea:'Lo que hoy el alumno hace con ayuda, mañana lo hará solo.',
+    pas:'ZDP: la primera carta de cada turno cuesta 1 menos.',
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','v_andamiaje','v_interaccion']}
+};
+const C={
+ arg:{n:'Argumento',c:1,t:'a',d:6,who:'x',r:0},
+ apu:{n:'Apunte',c:1,t:'s',b:5,who:'x',r:0},
+ f_pregunta:{n:'Pregunta Generadora',c:1,t:'a',d:7,vuln:2,who:'freire',r:0,say:'¿Y tú qué opinas del mundo que te rodea?'},
+ f_dialogo:{n:'Diálogo',c:1,t:'s',dr:2,who:'freire',r:0,say:'Nadie educa a nadie: nos educamos juntos.'},
+ f_praxis:{n:'Praxis',c:2,t:'a',d:9,str:1,who:'freire',r:1,src:'Acción + reflexión',say:'Acción y reflexión: ¡praxis!'},
+ f_liberadora:{n:'Educación Liberadora',c:2,t:'a',d:8,aoe:1,who:'freire',r:2,say:'¡La educación es un acto de libertad!'},
+ f_concient:{n:'Concientización',c:1,t:'s',vuln:2,aoe:1,who:'freire',r:1,say:'¡Abre los ojos al mundo!'},
+ f_palabra:{n:'Palabra Generadora',c:0,t:'a',d:4,dr:1,who:'freire',r:0},
+ f_pedagogia:{n:'Pedagogía del Oprimido',c:2,t:'s',str:3,ex:1,who:'freire',r:3,say:'La esperanza también se enseña.'},
+ f_circulo:{n:'Círculo de Cultura',c:1,t:'s',b:5,dr:1,who:'freire',r:1},
+ f_cadena:{n:'Cadena de Diálogo',c:1,t:'a',sp:'perCard',who:'freire',r:2},
+ m_ambiente:{n:'Ambiente Preparado',c:1,t:'s',b:8,who:'montessori',r:0,say:'Un ambiente preparado lo cambia todo.'},
+ m_autonomia:{n:'Autonomía',c:1,t:'a',sp:'blockStrike',who:'montessori',r:0,say:'¡Ayúdame a hacerlo por mí mismo!'},
+ m_mente:{n:'Mente Absorbente',c:1,t:'s',dr:2,b:3,who:'montessori',r:1,say:'La mente absorbente no descansa.'},
+ m_material:{n:'Material Sensorial',c:1,t:'a',d:6,b:4,who:'montessori',r:0},
+ m_libertad:{n:'Libertad con Límites',c:2,t:'s',b:14,str:1,who:'montessori',r:2},
+ m_ayudame:{n:'Ayúdame a Hacerlo Solo',c:0,t:'s',b:4,ex:1,who:'montessori',r:1},
+ m_observacion:{n:'Observación',c:1,t:'s',weak:2,b:6,who:'montessori',r:1,say:'Primero observa, luego guía.'},
+ m_periodo:{n:'Período Sensible',c:2,t:'a',d:12,dr:1,who:'montessori',r:2,say:'Hay un momento justo para aprender.'},
+ m_casa:{n:'Casa de Niños',c:2,t:'s',b:10,en:1,who:'montessori',r:3},
+ v_andamiaje:{n:'Andamiaje',c:1,t:'s',b:6,dr:1,who:'vygotsky',r:0,say:'Yo te sostengo mientras subes.'},
+ v_interaccion:{n:'Interacción Social',c:1,t:'a',d:5,h:2,who:'vygotsky',r:0,say:'Se aprende con otros.'},
+ v_mediacion:{n:'Mediación',c:1,t:'s',weak:2,vuln:1,who:'vygotsky',r:1},
+ v_zdp:{n:'Zona de Desarrollo Próximo',c:0,t:'s',dr:2,ex:1,who:'vygotsky',r:1,say:'Hoy con ayuda, mañana solo.'},
+ v_habla:{n:'Habla Privada',c:1,t:'s',str:1,dr:1,who:'vygotsky',r:1},
+ v_herramientas:{n:'Herramientas Culturales',c:2,t:'a',d:6,h:3,who:'vygotsky',r:2,say:'La cultura nos presta sus herramientas.'},
+ v_colaborativo:{n:'Aprendizaje Colaborativo',c:2,t:'a',d:10,aoe:1,who:'vygotsky',r:2},
+ v_internal:{n:'Internalización',c:2,t:'s',b:10,dr:1,str:1,who:'vygotsky',r:2,say:'Lo social se vuelve interno.'},
+ v_pares:{n:'Par Más Capaz',c:1,t:'s',en:1,b:5,dr:1,who:'vygotsky',r:3},
+ n_centro:{n:'Estudiante al Centro',c:1,t:'a',d:10,vuln:1,who:'n',r:1,src:'Aprendizaje Centrado en el Estudiante'},
+ n_coach:{n:'Pregunta Poderosa',c:1,t:'s',vuln:2,dr:1,who:'n',r:1,src:'Coaching'},
+ n_induc:{n:'Bienvenida',c:0,t:'s',b:5,who:'n',r:0,src:'Curso de Inducción'},
+ n_mapa:{n:'Mapa de Ruta',c:0,t:'s',dr:2,ex:1,who:'n',r:1,src:'Diseño Instruccional'},
+ n_invertida:{n:'Aula Invertida',c:0,t:'s',en:1,dr:1,ex:1,who:'n',r:2,src:'Entorno Actual del Aprendizaje'},
+ n_rubrica:{n:'Rúbrica',c:1,t:'a',d:8,weak:2,who:'n',r:1,src:'Evaluación del Aprendizaje'},
+ n_design:{n:'Design Thinking',c:2,t:'a',d:14,dr:1,who:'n',r:2,src:'Innovación y Design Thinking'},
+ n_marco:{n:'Marco Teórico',c:2,t:'s',b:16,who:'n',r:1,src:'Investigación Educativa'},
+ n_lider:{n:'Liderazgo',c:2,t:'s',str:2,b:8,who:'n',r:2,src:'Liderazgo'},
+ n_metod:{n:'Metodología Activa',c:1,t:'a',d:8,b:3,who:'n',r:0,src:'Metodologías de la Enseñanza'},
+ n_repaso:{n:'Repaso Espaciado',c:1,t:'s',b:5,dr:2,who:'n',r:1,src:'Neurociencia Educacional'},
+ n_tutoria:{n:'Tutoría',c:1,t:'s',b:8,heal:3,who:'n',r:2,src:'Sistemas de Soporte al Estudiante'},
+ n_apa:{n:'Cita APA',c:1,t:'s',b:7,dr:1,who:'n',r:0,src:'Taller de Normas APA'}
+};
+const WHOCOL={x:'#8a8a8a',n:'#c9a24a',freire:'#d9603b',montessori:'#4fa86a',vygotsky:'#5a8de0'};
+const TYCOL={a:'#c0463f',s:'#3f74b0'};
+
+const ENEMIES={
+ proc:{n:'Procrastinación',hp:32,pat:[{a:6},{b:7},{a:9}]},
+ plag:{n:'Plagio',hp:40,pat:[{a:7,weak:1},{a:10},{b:8,a:4}]},
+ dist:{n:'Distracción',hp:22,pat:[{a:5},{a:3,weak:1},{b:5}]},
+ sobre:{n:'Sobrecarga Cognitiva',hp:66,elite:1,pat:[{a:4,h:3},{str:2,b:8},{a:14}]},
+ des:{n:'La Deserción',hp:125,boss:1,pat:[{a:10,vuln:1},{b:12,str:2},{a:6,h:3},{a:20},{weak:2,a:8}]}
+};
+const STEPS=[
+ {k:'f',e:['proc'],ico:'😴'},{k:'f',e:['plag'],ico:'📋'},{k:'rest',ico:'☕'},
+ {k:'f',e:['dist','dist'],ico:'📱'},{k:'event',ico:'❓'},{k:'f',e:['sobre'],ico:'🤯'},{k:'rest',ico:'☕'},{k:'f',e:['des'],ico:'🚪'}
+];
+
+function cardText(c){
+  const p=[];
+  if(c.sp==='blockStrike')p.push('Inflige daño igual a tu Andamio.');
+  else if(c.sp==='perCard')p.push('Inflige 3 de daño por cada carta jugada este turno.');
+  else if(c.d)p.push(`Inflige ${c.d}${c.h>1?'×'+c.h:''} de daño${c.aoe?' a todos':''}.`);
+  if(c.b)p.push(`Gana ${c.b} Andamio.`);
+  if(c.vuln)p.push(`${c.aoe&&!c.d?'Todos ganan':'Aplica'} ${c.vuln} Confuso.`);
+  if(c.weak)p.push(`Aplica ${c.weak} Distraído.`);
+  if(c.str)p.push(`Gana ${c.str} Convicción.`);
+  if(c.dr)p.push(`Roba ${c.dr}.`);
+  if(c.en)p.push(`Gana ${c.en} energía.`);
+  if(c.heal)p.push(`Recupera ${c.heal} PV.`);
+  if(c.ex)p.push('Agota.');
+  return p.join(' ');
+}
+const TYNAME={a:'Ataque',s:'Habilidad'};
+function costOf(id){
+  const c=C[id];
+  if(B&&!B.over&&G.char==='vygotsky'&&B.played===0&&c.c>0)return c.c-1;
+  return c.c;
+}
+const SUB={freire:'Pedagogía crítica',montessori:'Método Montessori',vygotsky:'Socioculturalismo',x:'Básica'};
+const LORE={
+ arg:'En el aula, el primer arma es la razón: una idea bien fundamentada abre más puertas que el grito.',
+ apu:'Quien escribe lo que aprende lo aprende dos veces. Los apuntes son el escudo del estudiante.',
+ f_pregunta:'Freire propuso partir de preguntas que nacen de la realidad del educando, no de respuestas impuestas desde arriba.',
+ f_dialogo:'Para Freire, educar es dialogar: nadie educa a nadie, nos educamos juntos, mediados por el mundo.',
+ f_praxis:'Praxis es acción y reflexión para transformar el mundo. Reflexión sin acción es palabrería; acción sin reflexión, activismo.',
+ f_liberadora:'Frente a la educación «bancaria» que solo deposita datos, defendió una educación que libera de la opresión.',
+ f_concient:'La concientización es el despertar crítico: leer la realidad para poder cambiarla.',
+ f_palabra:'En Angicos (1963) su método alfabetizó a trabajadores agrícolas, en unas 40 horas según se cuenta, usando palabras de su propia vida.',
+ f_pedagogia:'Su obra más célebre, escrita en 1968, propone una pedagogía hecha con los oprimidos y no para ellos.',
+ f_circulo:'En sus Círculos de Cultura, en lugar del aula tradicional, un coordinador y los participantes dialogan: todos enseñan y todos aprenden.',
+ f_cadena:'Cada intervención en un diálogo abre la puerta a la siguiente: el pensamiento crece en cadena.',
+ m_ambiente:'Montessori llamó «ambiente preparado» al espacio pensado para el niño: muebles a su medida y materiales ordenados a su alcance.',
+ m_autonomia:'El niño que se sirve agua solo aprende mucho más que agua: construye su independencia.',
+ m_mente:'En los primeros años la mente del niño absorbe todo lo que lo rodea, sin esfuerzo, como una esponja.',
+ m_material:'Torre rosa, cilindros, cajas de colores: materiales diseñados para educar los sentidos y preparar la mente.',
+ m_libertad:'Libertad no es capricho: dentro de límites claros, el niño elige y aprende a disciplinarse a sí mismo.',
+ m_ayudame:'La frase que se le atribuye resume el método: «Ayúdame a hacerlo por mí mismo».',
+ m_observacion:'El guía montessoriano observa antes de intervenir: de ahí nace la ayuda justa y oportuna.',
+ m_periodo:'Hay períodos sensibles: momentos en que un niño aprende ciertas cosas con facilidad especial.',
+ m_casa:'En 1907 abrió en Roma, en el barrio de San Lorenzo, su primera Casa dei Bambini.',
+ v_andamiaje:'Wood, Bruner y Ross llamaron andamiaje a la ayuda temporal, inspirada en Vygotsky, que se retira cuando el aprendiz ya puede solo.',
+ v_interaccion:'Para Vygotsky todo aprendizaje es primero social: lo aprendemos entre personas y luego lo hacemos propio.',
+ v_mediacion:'Entre el estímulo y la respuesta hay mediadores: un signo, una palabra, un docente.',
+ v_zdp:'La distancia entre lo que un estudiante logra solo y lo que logra con ayuda. Ahí es donde el docente debe enseñar.',
+ v_habla:'Los niños se hablan a sí mismos para pensar; esa habla privada se vuelve luego pensamiento interno.',
+ v_herramientas:'Lenguaje, números, mapas: Vygotsky las llamó herramientas psicológicas, que la cultura nos presta para pensar mejor.',
+ v_colaborativo:'Trabajar con compañeros de distinto nivel permite avanzar dentro de la zona de desarrollo próximo.',
+ v_internal:'Lo que ocurre entre personas se internaliza: pasa del plano social al psicológico.',
+ v_pares:'Un compañero algo más avanzado puede ser el mejor puente hacia el siguiente nivel.',
+ n_centro:'Las decisiones del aula giran en torno a quien aprende: sus intereses, ritmos y metas.',
+ n_coach:'En coaching, las preguntas valen más que los consejos: abren posibilidades que la persona aún no ve.',
+ n_induc:'Toda travesía comienza con una bienvenida: conocer el campus, las reglas y a la gente.',
+ n_mapa:'Antes de enseñar, trazar el camino: objetivos, actividades y evaluación bien alineados.',
+ n_invertida:'La teoría se ve en casa y el aula se usa para practicar, debatir y resolver dudas.',
+ n_rubrica:'Una rúbrica vuelve transparente qué se espera y cómo se evalúa: justicia para docentes y estudiantes.',
+ n_design:'Empatizar, definir, idear, prototipar y probar: el método para innovar centrado en las personas.',
+ n_marco:'Toda investigación se apoya en gigantes: el marco teórico es la base sobre la que se construye.',
+ n_lider:'El liderazgo educativo inspira y delega: no se manda, se acompaña a que otros crezcan.',
+ n_metod:'Aprender haciendo: proyectos, casos, juegos. Las metodologías activas ponen al estudiante en acción.',
+ n_repaso:'La curva del olvido de Ebbinghaus muestra que repasar a intervalos fija la memoria a largo plazo.',
+ n_tutoria:'Un buen sistema de soporte evita la deserción: tutoría, bienestar y acompañamiento a tiempo.',
+ n_apa:'Citar bien es respetar al autor: las normas APA ordenan el diálogo entre fuentes y evitan el plagio.'
+};
+function cardHTML(id,o={}){
+  const c=C[id];const cost=o.noCostMod?c.c:costOf(id);
+  const sub=c.who==='n'?c.src:SUB[c.who];
+  let stat='';
+  if(c.sp==='blockStrike')stat='⚔ ?';
+  else if(c.d)stat=`⚔ ${c.d}${c.h>1?'×'+c.h:''}`;
+  else if(c.b)stat=`🛡 ${c.b}`;
+  return `<div class="card f-${c.who} rar${c.r} ${o.cls||''}" data-id="${id}" style="${o.style||''}" ${o.attr||''}>
+    <div class="in">
+      <div class="tb"><span class="nm">${c.n}</span><span class="cost">${cost}</span></div>
+      <div class="art"><img src="${A('card_'+id+'.webp')}" alt="" draggable="false"></div>
+      <div class="tl"><span>${TYNAME[c.t]} — ${sub}</span><i class="gem"></i></div>
+      <div class="box"><div class="rules">${cardText(c)}</div>${LORE[id]?`<hr><div class="lore">${LORE[id]}</div>`:''}</div>
+      <div class="ft"><span>MADU ADS 63 · Magíster</span><span>${['Común','Poco común','Rara','Mítica'][c.r]}</span></div>
+      ${stat?`<div class="pt">${stat}</div>`:''}
+    </div></div>`;
+}
+function pauseMenu(){
+  const old=document.getElementById('pause');
+  if(old){old.remove();return}
+  if(!G)return;
+  const o=document.createElement('div');o.className='ov';o.id='pause';
+  const busy=B&&G.scr==='battle'&&B.busy;
+  o.innerHTML=`<div class="panel" style="text-align:center;min-width:300px"><h2>Pausa</h2><br>
+  <div style="display:flex;flex-direction:column;gap:10px;align-items:stretch">
+  <button class="btn" onclick="sfx('click');pauseMenu()">▶ Continuar</button>
+  <button class="btn ghost" onclick="sfx('click');howto()">Cómo jugar</button>
+  <button class="btn ghost" ${busy?'disabled':''} onclick="pauseSave()">💾 Guardar y salir</button>
+  <button class="btn ghost" onclick="pauseGiveUp()">🏳 Rendirse</button>
+  <button class="btn ghost" onclick="pauseExit()">Salir sin guardar</button></div>
+  ${busy?'<p class="tip">Espera tu turno para guardar.</p>':''}</div>`;
+  document.body.appendChild(o);
+}
+function pauseSave(){if(saveGame()){document.getElementById('pause')?.remove();title()}else alert('No se pudo guardar en este navegador.')}
+function pauseGiveUp(){
+  if(!confirm('¿Rendirte? Perderás esta partida.'))return;
+  document.getElementById('pause')?.remove();G.rendido=1;G.hp=0;defeat();
+}
+function pauseExit(){
+  if(!confirm('¿Salir sin guardar? Se mantiene la última partida guardada, si existe.'))return;
+  document.getElementById('pause')?.remove();title();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  const ovs=document.querySelectorAll('.ov');
+  if(ovs.length){const last=ovs[ovs.length-1];last.remove();return}
+  if(G)pauseMenu();
+});
+/* escala el escenario a pantallas grandes y vista previa estilo Magic */
+function fit(){
+  const s=Math.max(1,Math.min(innerWidth/1280,innerHeight/720));
+  const app=$('#app');app.style.zoom=s;app.style.width=(innerWidth/s)+'px';app.style.height=(innerHeight/s)+'px';
+  const r=document.documentElement.style;r.setProperty('--S',s);r.setProperty('--H',(innerHeight/s)+'px');
+}
+addEventListener('resize',fit);
+document.addEventListener('mouseover',e=>{
+  const c=e.target.closest&&e.target.closest('.hand .card');
+  let pv=$('#preview');if(!pv){pv=document.createElement('div');pv.id='preview';document.body.appendChild(pv)}
+  if(c){pv.innerHTML=cardHTML(c.dataset.id,{noCostMod:0});pv.classList.add('on')}
+  else pv.classList.remove('on');
+});
+
+/* ---------- ESTADO ---------- */
+let G=null,B=null,epoch=0;
+const SAVE='magister_save_v1';
+function hasSave(){try{return !!localStorage.getItem(SAVE)}catch(e){return false}}
+function saveGame(){try{if(!G)return false;localStorage.setItem(SAVE,JSON.stringify({G,B:G.scr==='battle'?B:null}));return true}catch(e){return false}}
+function clearSave(){try{localStorage.removeItem(SAVE)}catch(e){}}
+function loadGame(){
+  let d;try{d=JSON.parse(localStorage.getItem(SAVE))}catch(e){}
+  if(!d||!d.G)return;
+  epoch++;G=d.G;B=d.B;
+  if(G.scr==='battle'&&B){const boss=STEPS[G.step].e.includes('des');setBg(boss?'bg_boss':'bg_battle');music(boss?'boss':'combat');B.busy=false;B.sel=null;B.deal=true;renderBattle()}
+  else if(G.scr==='reward')reward(G.rw);
+  else if(G.scr==='rest')rest();
+  else if(G.scr==='event')event();
+  else if(G.scr==='purge')purge();
+  else mapScreen();
+}
+function setBg(n){$('#app').style.backgroundImage=n?`url(${A(n+'.webp')})`:'none'}
+function muteBtn(){return `<button class="mini mutebtn" onclick="toggleMute()">${muted?'🔇':'🔊'}</button>`}
+
+function title(){
+  epoch++;G=null;B=null;setBg('bg_menu');music('menu');
+  $('#app').innerHTML=`<div class="center"><div class="titlebox">
+    <h1>Magíster</h1><h2 style="letter-spacing:4px">La Torre del Saber</h2>
+    <p class="sub">Un juego de cartas roguelike para la promo de la <b>Maestría en Docencia y Gestión Universitaria</b>.
+    Sube la torre con las ideas de los grandes maestros de la educación y vence a la <b>Deserción</b>.</p>
+    <div class="row">${hasSave()?`<button class="btn" onclick="initAudio();music('menu');sfx('click');loadGame()">⏯ Continuar partida</button>`:''}<button class="btn ${hasSave()?'ghost':''}" onclick="initAudio();music('menu');sfx('click');charSelect()">▶ ${hasSave()?'Nueva partida':'Comenzar'}</button>
+    <button class="btn ghost" onclick="sfx('click');howto()">Cómo jugar</button>
+    <button class="btn ghost" onclick="sfx('click');credits()">Créditos</button>${muteBtn()}</div>
+    <p class="tip" style="margin-top:14px">Demo v0.2 · ¡cuéntame qué te parece!</p></div></div>`;
+}
+function overlay(html){
+  const o=document.createElement('div');o.className='ov';
+  o.innerHTML=`<div class="panel">${html}<br><button class="btn" onclick="this.closest('.ov').remove()">Cerrar</button></div>`;
+  document.body.appendChild(o);
+}
+function howto(){
+  overlay(`<div class="legend"><h2>Cómo jugar</h2><ul>
+  <li>Cada turno tienes <b>3 energía</b> (🟡) y robas 5 cartas. Toca una carta para jugarla; si hay varios enemigos, toca después al objetivo.</li>
+  <li>Sobre cada enemigo ves su <b>intención</b>: ⚔️ ataque, 🛡️ defensa, ☠️ debilita, 💪 se fortalece.</li>
+  <li><b>Andamio</b> 🛡️ absorbe daño y se pierde al comenzar tu turno.</li>
+  <li><b>Convicción</b> 💪: tus ataques hacen más daño.</li>
+  <li><b>Confuso</b> 😵: recibe +50% de daño. <b>Distraído</b> 💤: hace −25% de daño.</li>
+  <li><b>Agota</b>: la carta sale del combate hasta el final.</li>
+  <li>Tras cada combate eliges 1 de 3 cartas. Las <b>doradas</b> con nombre de curso son de nuestra maestría: ¡hay una por cada materia!</li>
+  <li>Supera los 5 combates y a <b>La Deserción</b> para graduarte.</li></ul></div>`);
+}
+function credits(){
+  overlay(`<h2>Créditos</h2><p class="credit">Proyecto lúdico y sin fines de lucro, hecho para la promo MADU ADS 63.<br><br>
+  <b>Fotografías:</b> Wikimedia Commons (dominio público): Paulo Freire (1963), Maria Montessori (retrato), Lev S. Vygotsky.<br>
+  <b>Ilustraciones y música:</b> generadas con IA (Krea2 y MiniMax Music 3).<br>
+  <b>Diseño y programación:</b> hecho por un compañero de la promo con ayuda de Claude.<br><br>
+  Las frases de los maestros dentro del juego son paráfrasis de sus ideas, con fines didácticos.</p>`);
+}
+function charSelect(){
+  setBg('bg_menu');music('menu');
+  $('#app').innerHTML=`<div class="top"><span class="sp"></span>${muteBtn()}</div><div class="center"><h2>Elige a tu maestro</h2>
+  <div class="chars">${Object.entries(CHARS).map(([k,c])=>`
+    <div class="charcard" style="--c:${c.col}" onclick="sfx('click');start('${k}')">
+      <div class="ph"><img src="${A('ph_'+k+'.webp')}" alt="${c.n}"></div><h3>${c.n}</h3><small>${c.tema}</small>
+      <small><i>${c.idea}</i></small><div class="pas">${c.pas}</div><small>❤️ ${c.hp} PV</small>
+    </div>`).join('')}</div>
+  <button class="btn ghost" onclick="title()">Volver</button></div>`;
+}
+function start(k){
+  epoch++;clearSave();
+  G={char:k,hp:CHARS[k].hp,max:CHARS[k].hp,deck:[...CHARS[k].deck],step:0};
+  mapScreen();
+}
+
+/* ---------- MAPA / EVENTOS ---------- */
+function topBar(){
+  const c=CHARS[G.char];
+  return `<div class="top"><span><b>${c.n}</b></span><span>❤️ ${G.hp}/${G.max}</span>
+  <span>Piso ${Math.min(G.step+1,STEPS.length)}/${STEPS.length}</span><span class="sp"></span>
+  <button class="mini" onclick="showDeck()">Mazo (${G.deck.length})</button>${muteBtn()}
+  <button class="mini" onclick="pauseMenu()">☰ Pausa (Esc)</button></div>`;
+}
+function mapScreen(){
+  if(G.step>=STEPS.length)return win();
+  G.scr='map';B=null;saveGame();setBg('bg_menu');music('menu');
+  const s=STEPS[G.step];
+  const nodes=STEPS.map((x,i)=>`<div class="node ${i<G.step?'done':''} ${i===G.step?'cur':''}">${x.ico}</div>`).join('<div class="line"></div>');
+  const txt={f:G.step===STEPS.length-1?'La cima de la torre. Te espera <b>La Deserción</b>.':'Un nuevo obstáculo bloquea la escalera.',rest:'Una pausa en la sala de profesores.',event:'Algo inesperado en el pasillo…'}[s.k];
+  const lbl={f:'Entrar al combate',rest:'Descansar',event:'Ver qué ocurre'}[s.k];
+  const fn={f:'fight()',rest:'rest()',event:'event()'}[s.k];
+  $('#app').innerHTML=`${topBar()}<div class="center"><div class="titlebox"><h2>El ascenso</h2><br><div class="map">${nodes}</div>
+  <p class="sub">${txt}</p><button class="btn" onclick="sfx('click');${fn}">${lbl}</button></div></div>`;
+}
+function showDeck(){
+  const ids=[...G.deck].sort((a,b)=>C[a].who.localeCompare(C[b].who)||C[a].n.localeCompare(C[b].n));
+  overlay(`<h2>Tu mazo (${ids.length})</h2><div class="deck">${ids.map(i=>cardHTML(i,{cls:'big',style:'--fs:13px',noCostMod:1})).join('')}</div>`);
+}
+function rest(){
+  G.scr='rest';saveGame();
+  const h=Math.floor(G.max*0.3);
+  $('#app').innerHTML=`${topBar()}<div class="center"><div class="titlebox"><div style="font-size:60px">☕</div><h2>Sala de profesores</h2>
+  <p class="sub">Un café, un respiro y una buena conversación. Recuperas <b>${h} PV</b>.</p>
+  <button class="btn" onclick="sfx('heal');G.hp=Math.min(G.max,G.hp+${h});G.step++;mapScreen()">Descansar</button></div></div>`;
+}
+function event(){
+  G.scr='event';saveGame();
+  $('#app').innerHTML=`${topBar()}<div class="center"><div class="titlebox"><div style="font-size:60px">🧑‍🏫</div><h2>Un tutor te intercepta</h2>
+  <p class="sub">«Te he visto avanzar, colega. Antes de seguir subiendo, ¿en qué te ayudo?»</p>
+  <div class="row"><div class="choice" onclick="sfx('heal');G.max+=8;G.hp+=8;G.step++;mapScreen()"><b>Mentoría</b><br>+8 PV máximos.</div>
+  <div class="choice" onclick="sfx('click');purge()"><b>Depurar el mazo</b><br>Elimina 1 carta.</div>
+  <div class="choice" onclick="sfx('click');G.step++;mapScreen()"><b>Agradecer y seguir</b><br>No pasa nada.</div></div></div></div>`;
+}
+function purge(){
+  G.scr='purge';saveGame();
+  const ids=G.deck.map((id,i)=>[id,i]).sort((a,b)=>C[a[0]].n.localeCompare(C[b[0]].n));
+  $('#app').innerHTML=`${topBar()}<div class="center"><h2>Elige una carta para eliminar</h2>
+  <div class="deck">${ids.map(([id,i])=>cardHTML(id,{cls:'big',style:'--fs:13px',noCostMod:1,attr:`onclick="G.deck.splice(${i},1);sfx('hit');G.step++;mapScreen()"`})).join('')}</div></div>`;
+}
+
+/* ---------- COMBATE ---------- */
+function calc(base,str,weak,vuln){return Math.max(0,Math.floor((base+str)*(weak>0?0.75:1)*(vuln>0?1.5:1)))}
+function fight(){
+  G.scr='battle';
+  const s=STEPS[G.step];const boss=s.e.includes('des');
+  setBg(boss?'bg_boss':'bg_battle');music(boss?'boss':'combat');
+  B={enemies:s.e.map(k=>({...ENEMIES[k],key:k,max:ENEMIES[k].hp,hp:ENEMIES[k].hp,block:0,str:0,vuln:0,weak:0,pi:0})),
+     draw:shuffle([...G.deck]),hand:[],discard:[],exhaust:[],energy:3,block:0,str:0,vuln:0,weak:0,
+     played:0,sel:null,busy:false,fx:[],over:false,turn:0,say:null,deal:true};
+  startTurn();
+}
+function drawCards(n){
+  for(let i=0;i<n;i++){
+    if(B.hand.length>=10)break;
+    if(!B.draw.length){B.draw=shuffle(B.discard);B.discard=[]}
+    if(!B.draw.length)break;
+    B.hand.push(B.draw.pop());
+  }
+}
+function startTurn(){
+  B.turn++;B.energy=3;B.played=0;B.sel=null;
+  B.block=G.char==='montessori'?3:0;
+  drawCards(5);B.busy=false;B.deal=true;sfx('turn');
+  renderBattle();
+}
+function fx(id,text,cls){B.fx.push({id,text,cls})}
+function say(t){B.say={t,at:Date.now()}}
+function renderBattle(){
+  const c=CHARS[G.char];
+  const tgt=B.sel!==null;
+  const enH=B.enemies.map((e,i)=>{
+    const dead=e.hp<=0;const it=e.pat[e.pi%e.pat.length];
+    let intent='';
+    if(it.a)intent+=`⚔️${calc(it.a,e.str,e.weak,B.vuln)}${it.h>1?'×'+it.h:''} `;
+    if(it.b)intent+='🛡️ ';
+    if(it.weak||it.vuln)intent+='☠️ ';
+    if(it.str)intent+='💪 ';
+    return `<div class="unit enemy ${dead?'dead':''} ${e.elite?'elite':''} ${e.boss?'boss':''} ${tgt&&!dead?'targetable':''}" id="en${i}" ${tgt&&!dead?`onclick="pick(${i})"`:''}>
+      ${dead?'':`<div class="intent">${intent}</div>`}
+      <img class="eart" src="${A('en_'+e.key+'.webp')}" alt="" draggable="false">
+      <div class="plate">${e.n}</div>
+      <div class="bar"><i style="width:${Math.max(0,e.hp/e.max*100)}%"></i><span>${Math.max(0,e.hp)}/${e.max}</span></div>
+      <div>${e.block?`<span class="chip blk">🛡️${e.block}</span>`:''}${e.str?`<span class="chip">💪${e.str}</span>`:''}${e.vuln?`<span class="chip">😵${e.vuln}</span>`:''}${e.weak?`<span class="chip">💤${e.weak}</span>`:''}</div>
+    </div>`}).join('');
+  const n=B.hand.length;
+  const hand=B.hand.map((id,i)=>{
+    const ok=B.energy>=costOf(id)&&!B.busy;
+    const off=i-(n-1)/2;
+    const style=`--r:${(off*2.2).toFixed(1)}deg;--y:${(Math.abs(off)**2*1.6).toFixed(0)}px;--m:${n>7?-22:-4}px;--d:${(i*0.07).toFixed(2)}s`;
+    return cardHTML(id,{cls:`${ok?'':'no'} ${B.sel===i?'sel':''} ${B.deal?'deal':''}`,style,attr:`onclick="clickCard(${i})"`});
+  }).join('');
+  B.deal=false;
+  let bubble='';
+  if(B.say){const el=(Date.now()-B.say.at)/1000;if(el<3.5)bubble=`<div class="bubble" style="animation-delay:-${el.toFixed(2)}s">${B.say.t}</div>`}
+  $('#app').innerHTML=`${topBar()}
+  <div class="field">
+    <div class="unit hero" id="hero" style="--c:${c.col}">
+      ${bubble}
+      <div class="portrait"><img src="${A('ph_'+G.char+'.webp')}" alt="${c.n}" draggable="false"></div>
+      <div class="plate">${c.n}</div>
+      <div class="bar"><i style="width:${G.hp/G.max*100}%"></i><span>${G.hp}/${G.max}</span></div>
+      <div>${B.block?`<span class="chip blk">🛡️${B.block}</span>`:''}${B.str?`<span class="chip">💪${B.str}</span>`:''}${B.vuln?`<span class="chip">😵${B.vuln}</span>`:''}${B.weak?`<span class="chip">💤${B.weak}</span>`:''}</div>
+    </div>
+    <div class="enemies">${enH}</div>
+  </div>
+  <div class="hud">
+    <div class="side"><div class="orb">${B.energy}/3</div><div class="pile">Mazo ${B.draw.length}<br>Descarte ${B.discard.length}</div></div>
+    <div class="hand">${hand}</div>
+    <div class="side"><button class="btn endbtn" ${B.busy?'disabled':''} onclick="endTurn()">Terminar turno</button></div>
+  </div>`;
+  for(const f of B.fx){
+    const el=document.getElementById(f.id);if(!el)continue;
+    if(f.cls==='lunge'){el.classList.add('lunge');continue}
+    const s=document.createElement('div');s.className='fl '+f.cls;s.textContent=f.text;el.appendChild(s);
+    if(f.cls==='dmg'){
+      el.classList.add('shake');
+      const x=document.createElement('div');x.className=f.id==='hero'?'flash':'slash';
+      (el.querySelector('.portrait,.eart')?.parentElement===el&&f.id!=='hero'?el:el).appendChild(x);
+    }
+  }
+  B.fx=[];
+}
+function needsTarget(c){return !c.aoe&&(c.d||c.sp==='blockStrike'||c.sp==='perCard'||c.vuln||c.weak)}
+function clickCard(i){
+  if(B.busy||B.over)return;
+  if(B.sel===i){B.sel=null;return renderBattle()}
+  const id=B.hand[i],c=C[id];
+  if(B.energy<costOf(id))return;
+  if(needsTarget(c)){
+    const alive=B.enemies.map((e,k)=>e.hp>0?k:-1).filter(k=>k>=0);
+    if(alive.length>1){B.sel=i;sfx('click');return renderBattle()}
+    return play(i,alive[0]);
+  }
+  play(i,null);
+}
+function pick(k){if(B.sel===null)return;const i=B.sel;B.sel=null;play(i,k)}
+function hitEnemy(e,idx,amount){
+  let dmg=calc(amount,B.str,B.weak,e.vuln);
+  const ab=Math.min(e.block,dmg);e.block-=ab;dmg-=ab;e.hp-=dmg;
+  fx('en'+idx,dmg>0?`-${dmg}`:'🛡️','dmg');
+}
+function play(i,tIdx){
+  $('#preview')?.classList.remove('on');
+  const id=B.hand[i],c=C[id];
+  B.energy-=costOf(id);B.hand.splice(i,1);B.played++;
+  const alive=B.enemies.filter(e=>e.hp>0);
+  const targets=c.aoe?alive:(tIdx!=null?[B.enemies[tIdx]]:[]);
+  let amount=0;
+  if(c.sp==='blockStrike')amount=B.block;
+  else if(c.sp==='perCard')amount=3*B.played;
+  else if(c.d)amount=c.d;
+  sfx('card');
+  if(amount>0){
+    const hits=c.h||1;
+    for(let h=0;h<hits;h++)for(const e of targets){if(e.hp>0)hitEnemy(e,B.enemies.indexOf(e),amount)}
+    setTimeout(()=>sfx('hit'),60);
+  }
+  for(const e of targets){
+    if(c.vuln){e.vuln+=c.vuln;fx('en'+B.enemies.indexOf(e),'Confuso','st')}
+    if(c.weak){e.weak+=c.weak;fx('en'+B.enemies.indexOf(e),'Distraído','st')}
+  }
+  if(c.vuln||c.weak)setTimeout(()=>sfx('debuff'),90);
+  if(c.b){B.block+=c.b;fx('hero',`+${c.b} 🛡️`,'blk');setTimeout(()=>sfx('block'),70)}
+  if(c.str){B.str+=c.str;fx('hero',`+${c.str} 💪`,'st');setTimeout(()=>sfx('buff'),90)}
+  if(c.heal){G.hp=Math.min(G.max,G.hp+c.heal);fx('hero',`+${c.heal}`,'heal');setTimeout(()=>sfx('heal'),120)}
+  if(c.en)B.energy+=c.en;
+  if(c.dr)drawCards(c.dr);
+  if(G.char==='freire'&&B.played===3){drawCards(1);fx('hero','Diálogo +1 carta','st')}
+  if(c.say)say(c.say);
+  if(c.ex)B.exhaust.push(id);else B.discard.push(id);
+  if(B.enemies.every(e=>e.hp<=0)){B.over=true;renderBattle();{const ep=epoch;setTimeout(()=>{if(ep===epoch){sfx('win');reward()}},1000)}return}
+  renderBattle();
+}
+async function endTurn(){
+  if(B.busy||B.over)return;
+  const ep=epoch;B.busy=true;B.sel=null;sfx('click');
+  B.discard.push(...B.hand);B.hand=[];renderBattle();
+  await sleep(350);if(ep!==epoch)return;
+  for(let i=0;i<B.enemies.length;i++){
+    const e=B.enemies[i];if(e.hp<=0)continue;
+    e.block=0;
+    const it=e.pat[e.pi%e.pat.length];e.pi++;
+    if(it.a)fx('en'+i,'','lunge');
+    if(it.b){e.block+=it.b;fx('en'+i,`+${it.b} 🛡️`,'blk');sfx('block')}
+    if(it.str){e.str+=it.str;fx('en'+i,`+${it.str} 💪`,'st');sfx('buff')}
+    if(it.a){
+      let tot=0;
+      for(let h=0;h<(it.h||1);h++){
+        let dmg=calc(it.a,e.str,e.weak,B.vuln);
+        const ab=Math.min(B.block,dmg);B.block-=ab;dmg-=ab;G.hp-=dmg;tot+=dmg;
+        fx('hero',dmg>0?`-${dmg}`:'🛡️','dmg');
+      }
+      setTimeout(()=>sfx(tot>0?'hurt':'block'),220);
+    }
+    if(it.weak){B.weak+=it.weak;fx('hero','Distraído','st');sfx('debuff')}
+    if(it.vuln){B.vuln+=it.vuln;fx('hero','Confuso','st');sfx('debuff')}
+    renderBattle();
+    await sleep(750);if(ep!==epoch)return;
+    if(G.hp<=0){G.hp=0;renderBattle();return defeat()}
+  }
+  for(const e of B.enemies){if(e.vuln>0)e.vuln--;if(e.weak>0)e.weak--}
+  if(B.vuln>0)B.vuln--;if(B.weak>0)B.weak--;
+  startTurn();
+}
+
+/* ---------- RECOMPENSA ---------- */
+function rewardPool(){
+  const w={r0:6,r1:3,r2:1.2,r3:0.5};
+  const bag=Object.entries(C).filter(([id,c])=>c.who!=='x'&&(c.who===G.char||c.who==='n')&&!CHARS[G.char].deck.includes(id));
+  const out=[];
+  while(out.length<3&&bag.length){
+    const tot=bag.reduce((s,[id,c])=>s+w['r'+c.r],0);let r=Math.random()*tot;
+    for(let i=0;i<bag.length;i++){r-=w['r'+bag[i][1].r];if(r<=0){out.push(bag[i][0]);bag.splice(i,1);break}}
+  }
+  return out;
+}
+function reward(opts){
+  opts=opts||rewardPool();G.scr='reward';G.rw=opts;saveGame();
+  setBg('bg_menu');music('menu');
+  $('#app').innerHTML=`${topBar()}<div class="center"><h2>¡Obstáculo superado!</h2><p class="sub">Elige una carta para tu mazo.</p>
+  <div class="rewards">${opts.map(id=>cardHTML(id,{cls:'big',style:'--fs:19px',noCostMod:1,attr:`onclick="take('${id}')"`})).join('')}</div>
+  <button class="btn ghost" onclick="take(null)">Saltar</button></div>`;
+}
+function take(id){sfx('click');if(id)G.deck.push(id);G.step++;mapScreen()}
+
+/* ---------- FIN ---------- */
+function defeat(){
+  epoch++;clearSave();if(B)B.over=true;sfx('lose');setBg('bg_battle');
+  if(tracks[curTrack]){const t=tracks[curTrack];t.volume=0.15}
+  $('#app').innerHTML=`<div class="center"><div class="titlebox"><h1>Reprobado</h1>
+  <p class="sub">${G.rendido?`${CHARS[G.char].n} se rindió en el piso ${G.step+1}.`:`${G.step>=STEPS.length-1?'La Deserción':'El camino'} venció a ${CHARS[G.char].n} en el piso ${G.step+1}.`} ¡Pero siempre hay recuperación!</p>
+  <div class="row"><button class="btn" onclick="start('${G.char}')">Reintentar</button>
+  <button class="btn ghost" onclick="charSelect()">Cambiar de maestro</button></div></div></div>`;
+}
+function win(){
+  epoch++;clearSave();
+  setBg('bg_menu');music('victory');sfx('win');
+  $('#app').innerHTML=`<div class="center"><div class="titlebox"><div style="font-size:64px">🎓</div><h1>¡Graduado!</h1>
+  <p class="sub">${CHARS[G.char].n} venció a la Deserción.<br><b>¡Toda la promo llega a la cima de la torre!</b><br>Mazo final: ${G.deck.length} cartas.</p>
+  <p class="tip">¿Qué te pareció? ¿Qué maestro, carta o curso añadirías?</p>
+  <div class="row"><button class="btn" onclick="charSelect()">Jugar con otro maestro</button>
+  <button class="btn ghost" onclick="title()">Inicio</button></div></div></div>`;
+}
+fit();
+title();
+</script>
+</body>
+</html>
