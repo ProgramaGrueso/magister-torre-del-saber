@@ -160,6 +160,23 @@ h2{margin:0;color:var(--gold);text-shadow:0 2px 4px #000}
   .center{gap:8px;padding:8px}.node{width:40px;height:40px;font-size:20px}.line{width:8px}
   .rewards{gap:10px;padding:6px}.deck{gap:10px}.panel{padding:12px}
 }
+@media (max-height:460px){
+  .top{padding:2px 8px;font-size:11px}.mini{padding:1px 7px;font-size:11px}
+  .card{--fs:6.6px}.card.big.lg{--fs:8px}.card.big{--fs:7.5px}
+  .hand{overflow:visible;height:66px;min-height:66px;padding:0 4px;align-items:flex-start;justify-content:center}
+  .card{transform:rotate(var(--r,0deg)) translateY(var(--y,0px))}
+  .card:hover{transform:rotate(var(--r,0deg)) translateY(var(--y,0px))}
+  .card.sel{transform:translateY(-70px) scale(1.04) rotate(0)!important;z-index:60}
+  .hud{padding:0 6px 0}
+  .orb{width:38px;height:38px;font-size:15px}.pile{font-size:9px}.side{min-width:54px}
+  .btn{padding:5px 10px;font-size:12px}
+  .portrait{width:calc(var(--H,300px)*.27)}.eart{width:calc(var(--H,300px)*.34)}.unit.enemy.boss .eart{width:calc(var(--H,300px)*.44)}
+  .field{padding:2px 3vw}
+  .bar{width:84px;height:10px}.bar span{font-size:8px;line-height:10px}.plate{font-size:10px;padding:0 8px}
+  .titlebox{padding:10px 16px}h1{font-size:34px}.sub{font-size:13px}
+  .charcard .ph{width:70px}.charcard{width:190px}.charcard small{font-size:10px}
+}
+#preview .card{--fs:min(21px,calc(var(--H,720px)*.043))!important}
 </style>
 </head>
 <body>
@@ -429,9 +446,9 @@ addEventListener('resize',fit);
 const touchOnly=matchMedia('(hover:none)').matches;
 let lpT=null,lpDone=false;
 function showPrev(c){let pv=$('#preview');if(!pv){pv=document.createElement('div');pv.id='preview';document.body.appendChild(pv)}pv.innerHTML=cardHTML(c.dataset.id);pv.classList.add('on')}
-document.addEventListener('touchstart',e=>{const c=e.target.closest&&e.target.closest('.hand .card');lpDone=false;if(!c)return;lpT=setTimeout(()=>{lpDone=true;showPrev(c)},450)},{passive:true});
+document.addEventListener('touchstart',e=>{if(touchOnly)return;const c=e.target.closest&&e.target.closest('.hand .card');lpDone=false;if(!c)return;lpT=setTimeout(()=>{lpDone=true;showPrev(c)},450)},{passive:true});
 function endLP(){clearTimeout(lpT);$('#preview')?.classList.remove('on')}
-document.addEventListener('touchend',()=>setTimeout(endLP,50));
+document.addEventListener('touchend',()=>{if(!touchOnly)setTimeout(endLP,50)});
 document.addEventListener('touchmove',()=>{clearTimeout(lpT)},{passive:true});
 document.addEventListener('click',e=>{if(lpDone){e.stopPropagation();e.preventDefault();lpDone=false}},true);
 document.addEventListener('mouseover',e=>{if(touchOnly)return;
@@ -605,7 +622,7 @@ function renderBattle(){
     const ok=B.energy>=costOf(id)&&!B.busy;
     const off=i-(n-1)/2;
     const style=`--r:${(off*2.2).toFixed(1)}deg;--y:${(Math.abs(off)**2*1.6).toFixed(0)}px;--m:${n>7?-22:-4}px;--d:${(i*0.07).toFixed(2)}s`;
-    return cardHTML(id,{cls:`${ok?'':'no'} ${B.sel===i?'sel':''} ${B.deal?'deal':''}`,style,attr:`onclick="clickCard(${i})"`});
+    return cardHTML(id,{cls:`${ok?'':'no'} ${B.sel===i||B.tap===i?'sel':''} ${B.deal?'deal':''}`,style,attr:`onclick="clickCard(${i})"`});
   }).join('');
   B.deal=false;
   let bubble='';
@@ -641,6 +658,12 @@ function renderBattle(){
 function needsTarget(c){return !c.aoe&&(c.d||c.sp==='blockStrike'||c.sp==='perCard'||c.vuln||c.weak)}
 function clickCard(i){
   if(B.busy||B.over)return;
+  if(touchOnly&&B.tap!==i){
+    B.tap=i;B.sel=null;sfx('click');renderBattle();
+    if(B.hand[i])showPrev({dataset:{id:B.hand[i]}});
+    return;
+  }
+  B.tap=null;$('#preview')?.classList.remove('on');
   if(B.sel===i){B.sel=null;return renderBattle()}
   const id=B.hand[i],c=C[id];
   if(B.energy<costOf(id))return;
@@ -658,7 +681,7 @@ function hitEnemy(e,idx,amount){
   fx('en'+idx,dmg>0?`-${dmg}`:'🛡️','dmg');
 }
 function play(i,tIdx){
-  $('#preview')?.classList.remove('on');
+  B.tap=null;$('#preview')?.classList.remove('on');
   const id=B.hand[i],c=C[id];
   B.energy-=costOf(id);B.hand.splice(i,1);B.played++;
   const alive=B.enemies.filter(e=>e.hp>0);
@@ -691,7 +714,7 @@ function play(i,tIdx){
 }
 async function endTurn(){
   if(B.busy||B.over)return;
-  const ep=epoch;B.busy=true;B.sel=null;sfx('click');
+  const ep=epoch;B.busy=true;B.sel=null;B.tap=null;$('#preview')?.classList.remove('on');sfx('click');
   B.discard.push(...B.hand);B.hand=[];renderBattle();
   await sleep(350);if(ep!==epoch)return;
   for(let i=0;i<B.enemies.length;i++){
