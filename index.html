@@ -20,7 +20,7 @@ button{font-family:inherit;cursor:pointer}
 .btn:active{transform:translateY(2px);box-shadow:0 1px 0 #6e5217}
 .btn.ghost{background:#0007;color:var(--gold);border:1px solid var(--gold2);box-shadow:none}
 .btn:disabled{opacity:.4}
-.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;text-align:center;overflow:auto}
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:14px;padding:16px;text-align:center;overflow:auto}
 h1{font-size:clamp(34px,7vw,74px);margin:0;color:var(--gold);letter-spacing:6px;text-shadow:0 4px 0 #000,0 0 40px #e8c26a77;font-variant:small-caps}
 h2{margin:0;color:var(--gold);text-shadow:0 2px 4px #000}
 .sub{color:#d8cfe8;max-width:600px;line-height:1.45;text-shadow:0 1px 3px #000}
@@ -83,7 +83,7 @@ h2{margin:0;color:var(--gold);text-shadow:0 2px 4px #000}
 .side{display:flex;flex-direction:column;gap:6px;align-items:center;min-width:76px}
 .orb{width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe08a,#c98a10);color:#3a2300;font-weight:bold;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px #f0b840aa;border:3px solid #fff5}
 .pile{font-size:12px;color:var(--mut);text-align:center}
-.hand{flex:1;display:flex;justify-content:center;align-items:flex-end;min-height:278px;overflow-x:auto;padding:46px 10px 2px}
+.hand{flex:1;display:flex;justify-content:safe center;align-items:flex-end;min-height:278px;overflow-x:auto;padding:46px 10px 2px}
 .card{position:relative;flex:0 0 auto;font-size:var(--fs,10px);width:15em;height:21em;margin:0 var(--m,-4px);background:#0a0a0a;border-radius:.95em;padding:.42em;cursor:pointer;transition:transform .18s,box-shadow .18s;box-shadow:0 .5em 1.2em #000c;transform:rotate(var(--r,0deg)) translateY(var(--y,0px));font-family:Georgia,'Palatino Linotype',serif;color:#1a1208}
 .card .in{height:100%;border-radius:.65em;padding:.38em;display:flex;flex-direction:column;gap:.24em;background:linear-gradient(160deg,var(--f1),var(--f2));box-shadow:inset 0 0 .6em #0009}
 .card .tb{display:flex;align-items:center;justify-content:space-between;gap:.3em;height:1.95em;padding:0 .45em;border-radius:.45em;background:linear-gradient(var(--f3),var(--f4));border:.1em solid #0009;box-shadow:inset 0 .1em .15em #fff8,0 .12em .2em #0007}
@@ -116,7 +116,8 @@ h2{margin:0;color:var(--gold);text-shadow:0 2px 4px #000}
 .card.f-n{--f1:#a08a4a;--f2:#5f4e22;--f3:#f1e6bc;--f4:#d8c58a}
 .card.f-x{--f1:#7a746a;--f2:#403c36;--f3:#e6e1d6;--f4:#c4bdae}
 .hand .card hr,.hand .card .lore{display:none}
-.card.big{margin:0;--fs:17px}
+.card.big{margin:0;--fs:13px}
+.card.big.lg{--fs:19px}
 .card.big:hover{transform:translateY(-8px) scale(1.04)}
 #preview{zoom:var(--S,1);position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:150;pointer-events:none;display:none;filter:drop-shadow(0 0 30px #000)}
 #preview .card{margin:0;transform:none!important;--fs:21px}
@@ -139,16 +140,31 @@ h2{margin:0;color:var(--gold);text-shadow:0 2px 4px #000}
 .choice:hover{border-color:var(--gold);transform:translateY(-4px)}
 .choice b{color:var(--gold)}
 .credit{font-size:12px;color:var(--mut)}
-@media (max-width:760px){
-  .card{--fs:7px}.card.big{--fs:12px}
-  .hand{min-height:200px}.orb{width:50px;height:50px;font-size:20px}.side{min-width:56px}
-  .bar{width:96px}.charcard{width:100%}
-  .bubble{width:150px;font-size:11px}
+#rot{display:none;position:fixed;inset:0;z-index:999;background:#0f0b17;color:var(--gold);flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:30px;font-size:20px}
+#rot span{font-size:70px;animation:rotp 2s infinite}
+@keyframes rotp{50%{transform:rotate(90deg)}}
+@media (orientation:portrait) and (max-width:700px){#rot{display:flex}}
+@media (max-height:520px),(max-width:760px){
+  .top{padding:3px 10px;font-size:12px;gap:8px}.mini{padding:2px 8px;font-size:12px}
+  .card{--fs:7.2px;margin:0 var(--m,-3px)}.card.big{--fs:8.5px}.card.big.lg{--fs:9px}
+  .hand{min-height:0;padding:20px 4px 8px}
+  .hud{padding:2px 6px 4px}
+  .orb{width:42px;height:42px;font-size:17px}.side{min-width:58px;gap:2px}.pile{font-size:10px}
+  .btn{padding:7px 14px;font-size:13px}
+  .portrait{width:calc(var(--H,390px)*.2)}.eart{width:calc(var(--H,390px)*.26)}.unit.enemy.boss .eart{width:calc(var(--H,390px)*.36)}
+  .plate{font-size:11px}.bar{width:96px;height:11px}.bar span{font-size:9px;line-height:11px}
+  .field{padding:4px 3vw}.intent{font-size:12px;padding:1px 8px}.chip{font-size:10px}
+  .fl{font-size:20px}.bubble{width:150px;font-size:11px}
+  .charcard{width:200px;padding:8px}.charcard .ph{width:90px}.charcard h3{font-size:16px}.charcard .pas{font-size:11px}.charcard small{font-size:11px}
+  .chars{gap:10px}.titlebox{padding:14px 18px}h1{letter-spacing:3px}.sub{font-size:14px}
+  .center{gap:8px;padding:8px}.node{width:40px;height:40px;font-size:20px}.line{width:8px}
+  .rewards{gap:10px;padding:6px}.deck{gap:10px}.panel{padding:12px}
 }
 </style>
 </head>
 <body>
 <div id="app"></div>
+<div id="rot"><span>📱</span>Gira tu celular en horizontal<br>para jugar Magíster</div>
 <script>
 /* ---------- ASSETS ---------- */
 const ASSETS=window.__ASSETS||null;
@@ -410,7 +426,15 @@ function fit(){
   const r=document.documentElement.style;r.setProperty('--S',s);r.setProperty('--H',(innerHeight/s)+'px');
 }
 addEventListener('resize',fit);
-document.addEventListener('mouseover',e=>{
+const touchOnly=matchMedia('(hover:none)').matches;
+let lpT=null,lpDone=false;
+function showPrev(c){let pv=$('#preview');if(!pv){pv=document.createElement('div');pv.id='preview';document.body.appendChild(pv)}pv.innerHTML=cardHTML(c.dataset.id);pv.classList.add('on')}
+document.addEventListener('touchstart',e=>{const c=e.target.closest&&e.target.closest('.hand .card');lpDone=false;if(!c)return;lpT=setTimeout(()=>{lpDone=true;showPrev(c)},450)},{passive:true});
+function endLP(){clearTimeout(lpT);$('#preview')?.classList.remove('on')}
+document.addEventListener('touchend',()=>setTimeout(endLP,50));
+document.addEventListener('touchmove',()=>{clearTimeout(lpT)},{passive:true});
+document.addEventListener('click',e=>{if(lpDone){e.stopPropagation();e.preventDefault();lpDone=false}},true);
+document.addEventListener('mouseover',e=>{if(touchOnly)return;
   const c=e.target.closest&&e.target.closest('.hand .card');
   let pv=$('#preview');if(!pv){pv=document.createElement('div');pv.id='preview';document.body.appendChild(pv)}
   if(c){pv.innerHTML=cardHTML(c.dataset.id,{noCostMod:0});pv.classList.add('on')}
@@ -493,7 +517,7 @@ function topBar(){
   return `<div class="top"><span><b>${c.n}</b></span><span>❤️ ${G.hp}/${G.max}</span>
   <span>Piso ${Math.min(G.step+1,STEPS.length)}/${STEPS.length}</span><span class="sp"></span>
   <button class="mini" onclick="showDeck()">Mazo (${G.deck.length})</button>${muteBtn()}
-  <button class="mini" onclick="pauseMenu()">☰ Pausa (Esc)</button></div>`;
+  <button class="mini" onclick="pauseMenu()">☰ Pausa</button></div>`;
 }
 function mapScreen(){
   if(G.step>=STEPS.length)return win();
@@ -508,7 +532,7 @@ function mapScreen(){
 }
 function showDeck(){
   const ids=[...G.deck].sort((a,b)=>C[a].who.localeCompare(C[b].who)||C[a].n.localeCompare(C[b].n));
-  overlay(`<h2>Tu mazo (${ids.length})</h2><div class="deck">${ids.map(i=>cardHTML(i,{cls:'big',style:'--fs:13px',noCostMod:1})).join('')}</div>`);
+  overlay(`<h2>Tu mazo (${ids.length})</h2><div class="deck">${ids.map(i=>cardHTML(i,{cls:'big',noCostMod:1})).join('')}</div>`);
 }
 function rest(){
   G.scr='rest';saveGame();
@@ -529,7 +553,7 @@ function purge(){
   G.scr='purge';saveGame();
   const ids=G.deck.map((id,i)=>[id,i]).sort((a,b)=>C[a[0]].n.localeCompare(C[b[0]].n));
   $('#app').innerHTML=`${topBar()}<div class="center"><h2>Elige una carta para eliminar</h2>
-  <div class="deck">${ids.map(([id,i])=>cardHTML(id,{cls:'big',style:'--fs:13px',noCostMod:1,attr:`onclick="G.deck.splice(${i},1);sfx('hit');G.step++;mapScreen()"`})).join('')}</div></div>`;
+  <div class="deck">${ids.map(([id,i])=>cardHTML(id,{cls:'big',noCostMod:1,attr:`onclick="G.deck.splice(${i},1);sfx('hit');G.step++;mapScreen()"`})).join('')}</div></div>`;
 }
 
 /* ---------- COMBATE ---------- */
@@ -712,7 +736,7 @@ function reward(opts){
   opts=opts||rewardPool();G.scr='reward';G.rw=opts;saveGame();
   setBg('bg_menu');music('menu');
   $('#app').innerHTML=`${topBar()}<div class="center"><h2>¡Obstáculo superado!</h2><p class="sub">Elige una carta para tu mazo.</p>
-  <div class="rewards">${opts.map(id=>cardHTML(id,{cls:'big',style:'--fs:19px',noCostMod:1,attr:`onclick="take('${id}')"`})).join('')}</div>
+  <div class="rewards">${opts.map(id=>cardHTML(id,{cls:'big lg',noCostMod:1,attr:`onclick="take('${id}')"`})).join('')}</div>
   <button class="btn ghost" onclick="take(null)">Saltar</button></div>`;
 }
 function take(id){sfx('click');if(id)G.deck.push(id);G.step++;mapScreen()}
