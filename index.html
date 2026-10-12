@@ -113,6 +113,14 @@ h2{margin:0;color:var(--gold);text-shadow:0 2px 4px #000}
 .card.f-freire{--f1:#8f3e22;--f2:#5a2411;--f3:#f0cfb6;--f4:#d9a888}
 .card.f-montessori{--f1:#3d7a50;--f2:#1f4a2e;--f3:#d3e6c9;--f4:#a8caa0}
 .card.f-vygotsky{--f1:#3d62a6;--f2:#1d3566;--f3:#cddcf2;--f4:#9db9e0}
+.card.f-piaget{--f1:#6d4aa8;--f2:#3a2463;--f3:#e2d6f5;--f4:#b9a2e0}
+.card.f-dewey{--f1:#8a6238;--f2:#4d341a;--f3:#f0e0c8;--f4:#d0b690}
+.card.f-bruner{--f1:#1f7f76;--f2:#0f4743;--f3:#c9efe9;--f4:#94d3ca}
+.card.f-ausubel{--f1:#a83a6e;--f2:#5e1d3e;--f3:#f5d2e2;--f4:#e0a0bf}
+.card.f-gardner{--f1:#b08f1c;--f2:#665208;--f3:#f7edc0;--f4:#e0cd7c}
+.card.f-bloom{--f1:#4f8f98;--f2:#244d54;--f3:#d6eef0;--f4:#9ccbd0}
+.card.f-perrenoud{--f1:#7c9a2c;--f2:#3f4f12;--f3:#e8f2c4;--f4:#c3d787}
+.card.f-morin{--f1:#6b6b7a;--f2:#35353f;--f3:#e4e4ec;--f4:#b9b9c8}
 .card.f-n{--f1:#a08a4a;--f2:#5f4e22;--f3:#f1e6bc;--f4:#d8c58a}
 .card.f-x{--f1:#7a746a;--f2:#403c36;--f3:#e6e1d6;--f4:#c4bdae}
 .hand .card hr,.hand .card .lore{display:none}
@@ -261,7 +269,31 @@ const CHARS={
     deck:['arg','arg','arg','arg','apu','apu','apu','apu','m_ambiente','m_autonomia']},
   vygotsky:{n:'Lev Vygotsky',col:'#5a8de0',hp:72,tema:'Constructivismo sociocultural · URSS',idea:'Lo que hoy el alumno hace con ayuda, mañana lo hará solo.',
     pas:'ZDP: la primera carta de cada turno cuesta 1 menos.',
-    deck:['arg','arg','arg','arg','apu','apu','apu','apu','v_andamiaje','v_interaccion']}
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','v_andamiaje','v_interaccion']},
+ piaget:{n:"Jean Piaget",col:'#9b6fd6',hp:72,tema:"Epistemología genética · Suiza",idea:"El conocimiento se construye: cada niño es un pequeño científico que arma su propio mundo.",
+    pas:"Conflicto cognitivo: tu primer Ataque de cada turno aplica 1 Confuso.",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','pi_asimila','pi_acomoda']},
+ dewey:{n:"John Dewey",col:'#b8895a',hp:74,tema:"Escuela progresista · EE. UU.",idea:"La educación no es preparación para la vida: es la vida misma.",
+    pas:"Aprender haciendo: cada Ataque que juegas te da 1 de Andamio.",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','de_hacer','de_experiencia']},
+ bruner:{n:"Jerome Bruner",col:'#2fb5a8',hp:72,tema:"Psicología cultural · EE. UU.",idea:"Cualquier tema puede enseñarse de forma honesta a cualquier niño en cualquier etapa.",
+    pas:"Currículo en espiral: cada 3.er turno robas 2 cartas extra.",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','br_descubre','br_andamio']},
+ ausubel:{n:"David Ausubel",col:'#d6528f',hp:74,tema:"Psicología educativa · EE. UU.",idea:"El factor más importante en el aprendizaje es lo que el alumno ya sabe: averígualo y enseña en consecuencia.",
+    pas:"Organizador previo: al empezar cada turno ganas 1 de Andamio por cada Habilidad en tu mano.",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','au_organizador','au_anclaje']},
+ gardner:{n:"Howard Gardner",col:'#e3c13b',hp:70,tema:"Psicología cognitiva · EE. UU.",idea:"No hay una sola inteligencia: cada persona tiene un perfil distinto de talentos.",
+    pas:"Inteligencias múltiples: si juegas un Ataque y una Habilidad en el mismo turno, ganas 1 energía (una vez por turno).",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','ga_linguistica','ga_logica']},
+ bloom:{n:"Benjamin Bloom",col:'#9fd3d8',hp:72,tema:"Evaluación y dominio · EE. UU.",idea:"Casi todos pueden aprender lo que la escuela enseña si se les da el tiempo y la ayuda que necesitan.",
+    pas:"Taxonomía: cada carta de coste 2 o más que juegas te da 3 de Andamio.",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','bl_recordar','bl_aplicar']},
+ perrenoud:{n:"Philippe Perrenoud",col:'#a6c94a',hp:72,tema:"Sociología de la educación · Suiza",idea:"Una competencia es la capacidad de movilizar varios recursos para enfrentar con eficacia una situación.",
+    pas:"Movilizar recursos: la primera carta de coste 0 que juegues cada turno roba 1 carta.",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','pe_situacion','pe_movilizar']},
+ morin:{n:"Edgar Morin",col:'#b9b9d8',hp:70,tema:"Complejidad y transdisciplina · Francia",idea:"Más vale una cabeza bien puesta que una cabeza bien llena: hay que religar los saberes.",
+    pas:"Religar saberes: la primera carta neutral (de curso) que juegues cada turno roba 1 carta.",
+    deck:['arg','arg','arg','arg','apu','apu','apu','apu','mo_cabeza','mo_cegueras']}
 };
 const C={
  arg:{n:'Argumento',c:1,t:'a',d:6,who:'x',r:0},
@@ -293,6 +325,78 @@ const C={
  v_colaborativo:{n:'Aprendizaje Colaborativo',c:2,t:'a',d:10,aoe:1,who:'vygotsky',r:2},
  v_internal:{n:'Internalización',c:2,t:'s',b:10,dr:1,str:1,who:'vygotsky',r:2,say:'Lo social se vuelve interno.'},
  v_pares:{n:'Par Más Capaz',c:1,t:'s',en:1,b:5,dr:1,who:'vygotsky',r:3},
+ pi_asimila:{n:"Asimilación",c:1,t:'a',d:7,who:'piaget',r:0,say:"Lo nuevo encaja en lo que ya sé."},
+ pi_acomoda:{n:"Acomodación",c:1,t:'s',b:4,dr:1,who:'piaget',r:0,say:"Si no encaja, cambio mi esquema."},
+ pi_esquema:{n:"Esquema",c:1,t:'s',b:6,who:'piaget',r:0},
+ pi_conflicto:{n:"Conflicto Cognitivo",c:1,t:'s',vuln:2,dr:1,who:'piaget',r:1,say:"¡Eso no me cuadra! Necesito entenderlo."},
+ pi_egocentrismo:{n:"Egocentrismo Infantil",c:1,t:'a',d:5,weak:2,who:'piaget',r:1},
+ pi_conservacion:{n:"Conservación",c:1,t:'s',b:9,who:'piaget',r:1},
+ pi_operaciones:{n:"Operaciones Concretas",c:2,t:'a',d:12,who:'piaget',r:2,say:"Con objetos reales, ¡puedo razonar!"},
+ pi_equilibracion:{n:"Equilibración",c:2,t:'s',b:10,dr:1,str:1,who:'piaget',r:2},
+ pi_formal:{n:"Pensamiento Formal",c:1,t:'s',str:2,dr:2,ex:1,who:'piaget',r:3,say:"Ahora puedo pensar sobre lo posible."},
+ de_hacer:{n:"Aprender Haciendo",c:1,t:'a',d:6,b:3,who:'dewey',r:0,say:"¡Manos a la obra!"},
+ de_experiencia:{n:"Experiencia",c:1,t:'s',b:5,dr:1,who:'dewey',r:0},
+ de_problema:{n:"Situación Problemática",c:0,t:'a',d:4,vuln:1,who:'dewey',r:0},
+ de_reflexion:{n:"Pensamiento Reflexivo",c:1,t:'s',dr:2,b:3,who:'dewey',r:1,say:"Detente y piensa antes de seguir."},
+ de_laboratorio:{n:"Escuela Laboratorio",c:1,t:'a',d:7,dr:1,who:'dewey',r:1},
+ de_interes:{n:"Interés del Niño",c:1,t:'s',b:6,weak:2,who:'dewey',r:1},
+ de_democracia:{n:"Democracia y Educación",c:2,t:'s',b:12,str:1,who:'dewey',r:2,say:"La escuela es una pequeña sociedad."},
+ de_proyecto:{n:"Proyecto Cooperativo",c:2,t:'a',d:8,aoe:1,who:'dewey',r:2},
+ de_vida:{n:"La Educación es Vida",c:2,t:'s',str:2,dr:2,ex:1,who:'dewey',r:3,say:"No es preparación: es la vida misma."},
+ br_descubre:{n:"Descubrimiento",c:1,t:'a',d:7,who:'bruner',r:0,say:"¡Lo descubrí yo mismo!"},
+ br_andamio:{n:"Andamiaje Tutorial",c:1,t:'s',b:7,who:'bruner',r:0},
+ br_enactiva:{n:"Representación Enactiva",c:0,t:'a',d:5,who:'bruner',r:0},
+ br_iconica:{n:"Representación Icónica",c:1,t:'s',vuln:2,b:4,who:'bruner',r:1},
+ br_simbolica:{n:"Representación Simbólica",c:1,t:'a',d:9,who:'bruner',r:1},
+ br_narrativa:{n:"Pensamiento Narrativo",c:1,t:'s',dr:2,heal:2,who:'bruner',r:1,say:"Cada historia nos ayuda a entender."},
+ br_espiral:{n:"Currículo en Espiral",c:2,t:'s',b:10,dr:2,who:'bruner',r:2,say:"Volvemos al tema, cada vez más profundo."},
+ br_categorias:{n:"Categorización",c:2,t:'a',d:7,aoe:1,vuln:1,who:'bruner',r:2},
+ br_cualquier:{n:"Cualquier Tema, Cualquier Edad",c:2,t:'s',str:2,dr:2,en:1,ex:1,who:'bruner',r:3,say:"Todo se puede enseñar, bien traducido."},
+ au_previo:{n:"Conocimiento Previo",c:1,t:'s',b:6,who:'ausubel',r:0},
+ au_organizador:{n:"Organizador Previo",c:1,t:'s',b:4,dr:1,who:'ausubel',r:0,say:"Primero, el panorama general."},
+ au_anclaje:{n:"Anclaje",c:1,t:'a',d:7,who:'ausubel',r:0},
+ au_memoria:{n:"Aprendizaje Memorístico",c:0,t:'a',d:6,ex:1,who:'ausubel',r:1,say:"Repito, repito… y mañana lo olvido."},
+ au_significativo:{n:"Aprendizaje Significativo",c:1,t:'a',d:6,b:5,who:'ausubel',r:1,say:"¡Ahora sí tiene sentido!"},
+ au_recepcion:{n:"Aprendizaje por Recepción",c:1,t:'s',b:5,heal:2,who:'ausubel',r:1},
+ au_subsumidor:{n:"Subsumidor",c:2,t:'s',b:12,dr:1,who:'ausubel',r:2},
+ au_diferenciacion:{n:"Diferenciación Progresiva",c:2,t:'a',d:10,vuln:1,who:'ausubel',r:2},
+ au_reconciliacion:{n:"Reconciliación Integradora",c:2,t:'s',str:2,b:8,dr:1,ex:1,who:'ausubel',r:3,say:"Todo encaja en un solo mapa."},
+ ga_linguistica:{n:"Inteligencia Lingüística",c:1,t:'a',d:7,who:'gardner',r:0,say:"Las palabras son mi herramienta."},
+ ga_logica:{n:"Inteligencia Lógico-Matemática",c:1,t:'s',b:6,who:'gardner',r:0},
+ ga_espacial:{n:"Inteligencia Espacial",c:0,t:'s',dr:1,b:3,who:'gardner',r:0},
+ ga_musical:{n:"Inteligencia Musical",c:1,t:'s',str:1,dr:1,who:'gardner',r:1},
+ ga_corporal:{n:"Inteligencia Corporal-Kinestésica",c:1,t:'a',d:4,h:3,who:'gardner',r:1,say:"¡Pensar con el cuerpo!"},
+ ga_interpersonal:{n:"Inteligencia Interpersonal",c:1,t:'s',b:6,weak:1,who:'gardner',r:1},
+ ga_intrapersonal:{n:"Inteligencia Intrapersonal",c:2,t:'s',b:8,heal:4,str:1,who:'gardner',r:2},
+ ga_naturalista:{n:"Inteligencia Naturalista",c:2,t:'a',d:7,aoe:1,b:4,who:'gardner',r:2},
+ ga_frames:{n:"Estructuras de la Mente",c:2,t:'s',str:3,dr:1,ex:1,who:'gardner',r:3,say:"Todos tenemos muchas formas de ser inteligentes."},
+ bl_recordar:{n:"Recordar",c:0,t:'s',b:4,who:'bloom',r:0},
+ bl_comprender:{n:"Comprender",c:1,t:'s',b:5,dr:1,who:'bloom',r:0},
+ bl_aplicar:{n:"Aplicar",c:1,t:'a',d:7,who:'bloom',r:0,say:"¡A ponerlo en práctica!"},
+ bl_analizar:{n:"Analizar",c:1,t:'a',d:6,vuln:1,who:'bloom',r:1},
+ bl_evaluar:{n:"Evaluar",c:1,t:'a',d:7,weak:2,who:'bloom',r:1,say:"Juzgar con criterios, no con opiniones."},
+ bl_dominio:{n:"Aprendizaje de Dominio",c:1,t:'s',b:7,dr:1,who:'bloom',r:1},
+ bl_dossigma:{n:"El Problema de las 2 Sigma",c:2,t:'s',b:10,str:2,who:'bloom',r:2,say:"Un tutor personal lo cambia todo."},
+ bl_afectivo:{n:"Dominio Afectivo",c:2,t:'s',heal:5,b:6,who:'bloom',r:2},
+ bl_crear:{n:"Crear",c:2,t:'a',d:16,ex:1,who:'bloom',r:3,say:"¡Del saber nace algo nuevo!"},
+ pe_situacion:{n:"Situación-Problema",c:1,t:'a',d:7,who:'perrenoud',r:0,say:"Aprender resolviendo."},
+ pe_movilizar:{n:"Movilizar Recursos",c:0,t:'s',b:3,dr:1,who:'perrenoud',r:0},
+ pe_progresion:{n:"Organizar la Progresión",c:1,t:'s',b:6,who:'perrenoud',r:0},
+ pe_diferenciada:{n:"Pedagogía Diferenciada",c:1,t:'s',b:6,vuln:1,who:'perrenoud',r:1},
+ pe_formativa:{n:"Evaluación Formativa",c:1,t:'a',d:6,dr:1,who:'perrenoud',r:1,say:"Evaluar para ayudar a aprender."},
+ pe_equipo:{n:"Trabajo en Equipo",c:1,t:'s',b:5,str:1,who:'perrenoud',r:1},
+ pe_reflexiva:{n:"Práctica Reflexiva",c:2,t:'s',b:10,dr:2,who:'perrenoud',r:2},
+ pe_competencia:{n:"Competencia",c:2,t:'a',d:11,b:3,who:'perrenoud',r:2,say:"Saber, saber hacer y saber ser."},
+ pe_diez:{n:"Diez Nuevas Competencias",c:2,t:'s',str:2,b:8,dr:2,ex:1,who:'perrenoud',r:3},
+ mo_cabeza:{n:"Cabeza Bien Puesta",c:1,t:'s',b:6,dr:1,who:'morin',r:0,say:"Más vale una cabeza bien puesta que bien llena."},
+ mo_cegueras:{n:"Cegueras del Conocimiento",c:1,t:'a',d:6,vuln:1,who:'morin',r:0},
+ mo_religar:{n:"Religar Saberes",c:0,t:'s',dr:1,b:3,who:'morin',r:0},
+ mo_pertinente:{n:"Conocimiento Pertinente",c:1,t:'a',d:7,b:3,who:'morin',r:1},
+ mo_incertidumbre:{n:"Enfrentar la Incertidumbre",c:1,t:'s',weak:2,b:4,who:'morin',r:1,say:"La certeza no existe: aprendamos a navegar."},
+ mo_comprension:{n:"Enseñar la Comprensión",c:1,t:'s',heal:3,b:5,who:'morin',r:1},
+ mo_humana:{n:"La Condición Humana",c:2,t:'s',b:10,dr:1,str:1,who:'morin',r:2},
+ mo_terrenal:{n:"Identidad Terrenal",c:2,t:'a',d:9,aoe:1,who:'morin',r:2,say:"¡Somos ciudadanos de la Tierra!"},
+ mo_etica:{n:"La Ética del Género Humano",c:2,t:'s',str:2,b:8,heal:3,ex:1,who:'morin',r:3},
  n_centro:{n:'Estudiante al Centro',c:1,t:'a',d:10,vuln:1,who:'n',r:1,src:'Aprendizaje Centrado en el Estudiante'},
  n_coach:{n:'Pregunta Poderosa',c:1,t:'s',vuln:2,dr:1,who:'n',r:1,src:'Coaching'},
  n_induc:{n:'Bienvenida',c:0,t:'s',b:5,who:'n',r:0,src:'Curso de Inducción'},
@@ -307,7 +411,7 @@ const C={
  n_tutoria:{n:'Tutoría',c:1,t:'s',b:8,heal:3,who:'n',r:2,src:'Sistemas de Soporte al Estudiante'},
  n_apa:{n:'Cita APA',c:1,t:'s',b:7,dr:1,who:'n',r:0,src:'Taller de Normas APA'}
 };
-const WHOCOL={x:'#8a8a8a',n:'#c9a24a',freire:'#d9603b',montessori:'#4fa86a',vygotsky:'#5a8de0'};
+const WHOCOL={x:'#8a8a8a',n:'#c9a24a',freire:'#d9603b',montessori:'#4fa86a',vygotsky:'#5a8de0',piaget:'#9b6fd6',dewey:'#b8895a',bruner:'#2fb5a8',ausubel:'#d6528f',gardner:'#e3c13b',bloom:'#9fd3d8',perrenoud:'#a6c94a',morin:'#b9b9d8'};
 const TYCOL={a:'#c0463f',s:'#3f74b0'};
 
 const ENEMIES={
@@ -343,7 +447,7 @@ function costOf(id){
   if(B&&!B.over&&G.char==='vygotsky'&&B.played===0&&c.c>0)return c.c-1;
   return c.c;
 }
-const SUB={freire:'Pedagogía crítica',montessori:'Método Montessori',vygotsky:'Socioculturalismo',x:'Básica'};
+const SUB={freire:'Pedagogía crítica',montessori:'Método Montessori',vygotsky:'Socioculturalismo',piaget:"Constructivismo cognitivo",dewey:"Pragmatismo y escuela activa",bruner:"Aprendizaje por descubrimiento",ausubel:"Aprendizaje significativo",gardner:"Inteligencias múltiples",bloom:"Taxonomía de objetivos",perrenoud:"Enfoque por competencias",morin:"Pensamiento complejo",x:'Básica'};
 const LORE={
  arg:'En el aula, el primer arma es la razón: una idea bien fundamentada abre más puertas que el grito.',
  apu:'Quien escribe lo que aprende lo aprende dos veces. Los apuntes son el escudo del estudiante.',
@@ -374,6 +478,78 @@ const LORE={
  v_colaborativo:'Trabajar con compañeros de distinto nivel permite avanzar dentro de la zona de desarrollo próximo.',
  v_internal:'Lo que ocurre entre personas se internaliza: pasa del plano social al psicológico.',
  v_pares:'Un compañero algo más avanzado puede ser el mejor puente hacia el siguiente nivel.',
+ pi_asimila:"Para Piaget, asimilar es incorporar lo nuevo a los esquemas que ya tenemos, como el niño que llama «guau» a todo animal de cuatro patas.",
+ pi_acomoda:"Cuando lo nuevo no encaja, la mente se modifica: es la acomodación, el otro motor del aprendizaje.",
+ pi_esquema:"Un esquema es la estructura mental con la que organizamos lo que sabemos; crece y se reorganiza con cada experiencia.",
+ pi_conflicto:"El desequilibrio entre lo que creemos y lo que observamos empuja a pensar de nuevo: de ahí nace el aprendizaje.",
+ pi_egocentrismo:"En la etapa preoperacional al niño le cuesta ver el mundo desde el punto de vista de otro, como en su famoso experimento de las tres montañas.",
+ pi_conservacion:"Comprender que la cantidad no cambia aunque cambie la forma: el agua sigue siendo la misma en un vaso alto o ancho.",
+ pi_operaciones:"Entre los 7 y 11 años aparece la lógica aplicada a objetos concretos: clasificar, ordenar, contar.",
+ pi_equilibracion:"Piaget veía el desarrollo como una búsqueda constante de equilibrio entre asimilar y acomodar.",
+ pi_formal:"Desde los 11-12 años se puede razonar con hipótesis y abstracciones, sin necesidad de objetos presentes: la última etapa de su teoría.",
+ de_hacer:"Dewey defendió que se aprende actuando y reflexionando sobre lo hecho, no solo escuchando.",
+ de_experiencia:"Para Dewey la educación es una reconstrucción continua de la experiencia: cada vivencia prepara la siguiente.",
+ de_problema:"El pensamiento nace cuando hay una dificultad real que resolver: el problema es el punto de partida.",
+ de_reflexion:"En «Cómo pensamos» (1910) describió el pensar reflexivo como examinar con cuidado una creencia a la luz de sus fundamentos.",
+ de_laboratorio:"En 1896 fundó en la Universidad de Chicago una escuela experimental para poner a prueba sus ideas educativas.",
+ de_interes:"Partir de los intereses del niño es la clave para encaminar su esfuerzo hacia el conocimiento.",
+ de_democracia:"Su libro de 1916 sostiene que la escuela debe ser una comunidad democrática donde se aprende a convivir y decidir.",
+ de_proyecto:"Los proyectos colectivos unen la acción, la cooperación y el pensamiento: la escuela en miniatura de la vida real.",
+ de_vida:"En su credo pedagógico (1897) afirmó que la educación es un proceso de vida y no una preparación para la vida futura.",
+ br_descubre:"Bruner propuso que el estudiante aprenda explorando y descubriendo por sí mismo las estructuras de una disciplina.",
+ br_andamio:"Junto a Wood y Ross (1976) llamó andamiaje a la ayuda ajustada del adulto que se retira a medida que el aprendiz avanza.",
+ br_enactiva:"Primer modo de representar el mundo: mediante la acción. Aprendemos andar en bicicleta con el cuerpo, no con palabras.",
+ br_iconica:"Segundo modo: imágenes y esquemas que resumen la experiencia sin necesidad de actuarla.",
+ br_simbolica:"Tercer modo: el lenguaje y los símbolos, que permiten pensar lo abstracto.",
+ br_narrativa:"Bruner defendió que damos sentido al mundo contando historias: la narrativa es una forma de pensamiento tan válida como la lógica.",
+ br_espiral:"En «El proceso de la educación» (1960) propuso volver sobre las ideas fundamentales con creciente profundidad a lo largo de la escolaridad.",
+ br_categorias:"Pensar es categorizar: agrupar lo diverso en conceptos que nos permiten predecir y actuar.",
+ br_cualquier:"La famosa hipótesis de 1960: cualquier materia puede enseñarse de forma intelectualmente honesta a cualquier niño en cualquier etapa.",
+ au_previo:"Ausubel sostuvo que lo que el estudiante ya sabe es el punto de partida de todo aprendizaje nuevo.",
+ au_organizador:"Un organizador previo es un puente: una idea general presentada antes de la lección que conecta lo nuevo con lo conocido.",
+ au_anclaje:"Las ideas nuevas se anclan en conceptos relevantes que ya existen en la estructura cognitiva.",
+ au_memoria:"Aprender de memoria, sin relacionar con lo que se sabe, se olvida pronto: Ausubel lo contrapuso al aprendizaje significativo.",
+ au_significativo:"Ocurre cuando la información nueva se relaciona de modo sustancial y no arbitrario con lo que ya sabemos (1963).",
+ au_recepcion:"Ausubel defendió que la exposición bien organizada por el docente puede ser significativa, no solo el descubrimiento.",
+ au_subsumidor:"Un subsumidor es la idea más general ya presente que acoge y organiza las ideas nuevas más específicas.",
+ au_diferenciacion:"Se parte de lo general y se desciende hacia los detalles: así se va diferenciando el conocimiento.",
+ au_reconciliacion:"Relacionar conceptos aparentemente opuestos para ver sus semejanzas y reordenar el conocimiento en un todo coherente.",
+ ga_linguistica:"La sensibilidad para el lenguaje hablado y escrito: la de poetas, oradores y escritores.",
+ ga_logica:"La capacidad de razonar con números, patrones y argumentos: la de científicos y matemáticos.",
+ ga_espacial:"Pensar en imágenes y formas en el espacio: la de pintores, arquitectos y navegantes.",
+ ga_musical:"La sensibilidad al ritmo, el tono y el timbre: la de compositores e intérpretes.",
+ ga_corporal:"Usar el cuerpo con destreza para resolver problemas o crear: la de bailarines, deportistas y artesanos.",
+ ga_interpersonal:"Comprender a los demás, sus motivaciones y emociones: la de docentes, líderes y terapeutas.",
+ ga_intrapersonal:"Conocerse a uno mismo: emociones, fortalezas y límites. Es la inteligencia de la reflexión interior.",
+ ga_naturalista:"Reconocer y clasificar plantas, animales y fenómenos de la naturaleza: la de biólogos y agricultores.",
+ ga_frames:"En «Frames of Mind» (1983) propuso que la inteligencia es plural y que la escuela debería atender a todas esas formas de aprender.",
+ bl_recordar:"Primer escalón de la taxonomía: reconocer y evocar información. Es la base, no la meta.",
+ bl_comprender:"Segundo escalón: explicar con palabras propias las ideas aprendidas.",
+ bl_aplicar:"Tercer escalón: usar lo aprendido en situaciones nuevas.",
+ bl_analizar:"Cuarto escalón: descomponer una idea en partes y ver cómo se relacionan.",
+ bl_evaluar:"Quinto escalón: emitir juicios fundamentados según criterios y evidencias.",
+ bl_dominio:"Bloom propuso que, con instrucción adecuada y tiempo suficiente, la gran mayoría de estudiantes puede dominar los contenidos.",
+ bl_dossigma:"En 1984 mostró que los estudiantes con tutoría individual rindieron unas dos desviaciones estándar por encima de los de clase convencional.",
+ bl_afectivo:"La taxonomía no es solo cognitiva: incluye también emociones, valores y actitudes (dominio afectivo).",
+ bl_crear:"La cima de la taxonomía revisada (2001): reunir elementos para formar algo original y coherente.",
+ pe_situacion:"En su enfoque, las competencias se construyen enfrentando situaciones-problema reales y complejas.",
+ pe_movilizar:"Ser competente es saber echar mano, en el momento justo, de conocimientos, habilidades y actitudes.",
+ pe_progresion:"Una de las competencias que propone para enseñar: concebir y administrar secuencias de aprendizaje.",
+ pe_diferenciada:"Atender la diversidad: cada estudiante necesita caminos y apoyos distintos para llegar a la meta.",
+ pe_formativa:"Evaluar no para clasificar sino para regular el aprendizaje: dar información útil mientras aún se puede mejorar.",
+ pe_equipo:"Trabajar en equipo es otra de sus diez nuevas competencias para enseñar.",
+ pe_reflexiva:"Perrenoud insiste en la formación del docente como profesional reflexivo que analiza y mejora su propia práctica.",
+ pe_competencia:"Definió la competencia como la aptitud para enfrentar eficazmente una familia de situaciones, movilizando con conocimiento y discernimiento varios recursos.",
+ pe_diez:"Su libro «Diez nuevas competencias para enseñar» (1999) es un referente para formar docentes profesionales.",
+ mo_cabeza:"Montaigne lo dijo y Morin lo retoma: se necesita aptitud para organizar el conocimiento, no solo acumularlo.",
+ mo_cegueras:"Primer saber necesario: todo conocimiento corre el riesgo del error y de la ilusión. Hay que enseñarlos a detectar.",
+ mo_religar:"Contra la fragmentación del conocimiento, propone unir las disciplinas para comprender lo complejo.",
+ mo_pertinente:"Segundo saber: un conocimiento pertinente sitúa la información en su contexto y en el conjunto al que pertenece.",
+ mo_incertidumbre:"Quinto saber: las ciencias nos dieron certezas, pero también revelaron incertidumbres; hay que aprender a navegar en un océano de ellas.",
+ mo_comprension:"Sexto saber: la comprensión mutua entre humanos es condición de la solidaridad intelectual y moral.",
+ mo_humana:"Tercer saber: la condición humana es a la vez física, biológica, psíquica, cultural, social e histórica.",
+ mo_terrenal:"Cuarto saber: la humanidad comparte un destino planetario y debe pensarse como comunidad de destino.",
+ mo_etica:"Séptimo saber: la ética del género humano, o antropo-ética, une al individuo, la sociedad y la especie.",
  n_centro:'Las decisiones del aula giran en torno a quien aprende: sus intereses, ritmos y metas.',
  n_coach:'En coaching, las preguntas valen más que los consejos: abren posibilidades que la persona aún no ve.',
  n_induc:'Toda travesía comienza con una bienvenida: conocer el campus, las reglas y a la gente.',
@@ -507,7 +683,7 @@ function howto(){
 }
 function credits(){
   overlay(`<h2>Créditos</h2><p class="credit">Proyecto lúdico y sin fines de lucro, hecho para la promo MADU ADS 63.<br><br>
-  <b>Fotografías:</b> Wikimedia Commons (dominio público): Paulo Freire (1963), Maria Montessori (retrato), Lev S. Vygotsky.<br>
+  <b>Fotografías:</b> Wikimedia Commons (dominio público): Paulo Freire (1963), Maria Montessori (retrato), Lev S. Vygotsky, Jean Piaget (Ann Arbor), John Dewey (Underwood &amp; Underwood), Jerome Bruner (1961), Edgar Morin (1972); Howard Gardner (2013, Citizen University, CC BY 3.0). David Ausubel, Benjamin Bloom y Philippe Perrenoud no tienen foto libre: sus retratos son ilustraciones imaginadas con IA, sin parecido real.<br>
   <b>Ilustraciones y música:</b> generadas con IA (Krea2 y MiniMax Music 3).<br>
   <b>Diseño y programación:</b> hecho por un compañero de la promo con ayuda de Claude.<br><br>
   Las frases de los maestros dentro del juego son paráfrasis de sus ideas, con fines didácticos.</p>`);
@@ -594,8 +770,11 @@ function drawCards(n){
 }
 function startTurn(){
   B.turn++;B.energy=3;B.played=0;B.sel=null;
-  B.block=G.char==='montessori'?3:0;
-  drawCards(5);B.busy=false;B.deal=true;sfx('turn');
+  B.block=G.char==='montessori'?3:0;B.fl={};
+  drawCards(5);
+  if(G.char==='bruner'&&B.turn%3===0){drawCards(2);fx('hero','Espiral +2 cartas','st')}
+  if(G.char==='ausubel'){const n=B.hand.filter(i=>C[i].t==='s').length;if(n){B.block+=n;fx('hero',`+${n} 🛡️`,'blk')}}
+ B.busy=false;B.deal=true;sfx('turn');
   renderBattle();
 }
 function fx(id,text,cls){B.fx.push({id,text,cls})}
@@ -680,6 +859,30 @@ function hitEnemy(e,idx,amount){
   const ab=Math.min(e.block,dmg);e.block-=ab;dmg-=ab;e.hp-=dmg;
   fx('en'+idx,dmg>0?`-${dmg}`:'🛡️','dmg');
 }
+function passive(id,c,targets){
+  const f=B.fl||(B.fl={});
+  switch(G.char){
+  case 'piaget':
+    if(c.t==='a'&&!f.p){f.p=1;for(const e of targets){if(e.hp>0){e.vuln+=1;fx('en'+B.enemies.indexOf(e),'Confuso','st')}}}
+    break;
+  case 'dewey':
+    if(c.t==='a'){B.block+=1;fx('hero','+1 🛡️','blk')}
+    break;
+  case 'gardner':
+    f[c.t]=1;
+    if(f.a&&f.s&&!f.g){f.g=1;B.energy+=1;fx('hero','Múltiples +1 energía','st')}
+    break;
+  case 'bloom':
+    if(c.c>=2){B.block+=3;fx('hero','+3 🛡️','blk')}
+    break;
+  case 'perrenoud':
+    if(c.c===0&&!f.p){f.p=1;drawCards(1);fx('hero','Movilizar +1 carta','st')}
+    break;
+  case 'morin':
+    if(c.who==='n'&&!f.m){f.m=1;drawCards(1);fx('hero','Religar +1 carta','st')}
+    break;
+  }
+}
 function play(i,tIdx){
   B.tap=null;$('#preview')?.classList.remove('on');
   const id=B.hand[i],c=C[id];
@@ -707,6 +910,7 @@ function play(i,tIdx){
   if(c.en)B.energy+=c.en;
   if(c.dr)drawCards(c.dr);
   if(G.char==='freire'&&B.played===3){drawCards(1);fx('hero','Diálogo +1 carta','st')}
+  passive(id,c,targets);
   if(c.say)say(c.say);
   if(c.ex)B.exhaust.push(id);else B.discard.push(id);
   if(B.enemies.every(e=>e.hp<=0)){B.over=true;renderBattle();{const ep=epoch;setTimeout(()=>{if(ep===epoch){sfx('win');reward()}},1000)}return}
